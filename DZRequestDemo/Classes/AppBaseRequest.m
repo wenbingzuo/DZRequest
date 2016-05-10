@@ -11,17 +11,13 @@
 @implementation AppBaseRequest
 
 - (NSString *)requestBaseURL {
-    return @"https://api-test.menke.joinmind.cn";
+    return @"https://www.api.com";
 }
 
 - (NSDictionary *)requestDefaultHeader {
     NSMutableDictionary *header = [NSMutableDictionary dictionary];
     [header dz_setNilableValue:nil forKey:@"Authorization"];
     return header;
-}
-
-- (void)dealloc {
-    NSLog(@"%@ dealloc", [self class]);
 }
 
 @end

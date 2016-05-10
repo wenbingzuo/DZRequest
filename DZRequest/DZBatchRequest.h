@@ -10,17 +10,16 @@
 @class DZBaseRequest, DZBatchRequest;
 
 typedef NS_ENUM(NSUInteger, DZBatchRequestState) {
-    DZBatchRequestStateIdle, ///<未开始状态
-    DZBatchRequestStateRunning, ///<请求进行中
-    DZBatchRequestStateCompleted, ///<已完成
-    DZBatchRequestStateCanceling, ///<取消
+    DZBatchRequestStateIdle, ///< The default state when create receiver.
+    DZBatchRequestStateRunning, ///< The receiver is currently running.
+    DZBatchRequestStateCompleted, ///< The receiver has completed the task.
+    DZBatchRequestStateCanceling, ///< The receiver has been told to cancel.
 };
 
 typedef void(^DZBatchRequestCompletionCallback)(DZBatchRequest *batchRequest);
 
 @interface DZBatchRequest : NSObject
 
-/// 所有要运行的请求.
 @property (nonatomic, strong, readonly) NSArray *requests;
 
 /**

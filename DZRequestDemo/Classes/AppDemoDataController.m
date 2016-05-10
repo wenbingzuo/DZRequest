@@ -50,28 +50,6 @@
     [chainRequest startChainRequestWithCompletionCallback:^(DZChainRequest *chainRequest, DZBaseRequest *request) {
         
     }];
-    
-//    AppLoginRequest *login = [AppLoginRequest new];
-//    login.username = name;
-//    login.password = password;
-//    
-//    AppGetUserinfoRequest *info = [AppGetUserinfoRequest new];
-    
-    
-//    NSSet *set = [NSSet setWithObjects:self.loginRequest, self.getUserinfoRequest, self.loginRequest, self.getUserinfoRequest, nil];
-    
-//    DZBatchRequest *batchRequest = [[DZBatchRequest alloc] initWithRequests:@[self.loginRequest, self.getUserinfoRequest, self.loginRequest, self.getUserinfoRequest]];
-//    [batchRequest startWithRequestsSuccessCallback:^(DZBatchRequest *batchRequest) {
-//        
-//    } failureCallback:^(DZBatchRequest *batchRequest) {
-//        
-//    }];
-    
-//    [self.loginRequest startRequestWithSuccessCallback:^(__kindof DZBaseRequest *request) {
-//       
-//    } failureCallback:^(__kindof DZBaseRequest *request) {
-//        
-//    }];
 }
 
 @end

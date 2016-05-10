@@ -8,10 +8,12 @@
 
 #import "AppDemoViewController.h"
 #import "AppDemoDataController.h"
+#import "AppLoginRequest.h"
 
 @interface AppDemoViewController ()
 
 @property (nonatomic, strong) AppDemoDataController *dataController;
+@property (nonatomic, strong) AppLoginRequest *loginRequest;
 
 @end
 
@@ -26,20 +28,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.loginRequest = [[AppLoginRequest alloc] initWithUsername:@"88888888888" password:@"123"];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-//    AppAuthorizeRequest *request = [AppAuthorizeRequest new];
-//    [request startWithRequestSuccessCallback:^(__kindof DZBaseRequest *request) {
-//        NSString *string = [[NSString alloc] initWithData:request.responseObject encoding:NSUTF8StringEncoding];
-//        NSLog(@"%@", string);
-//    } failureCallback:^(__kindof DZBaseRequest *request) {
-//        
-//    }];
-    [self.dataController sendLoginRequest:@"17710280827" password:@"123456" callback:^(NSError *error) {
-        
-    }];
+    [self.loginRequest start];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.loginRequest cancel];
 }
 
 @end
