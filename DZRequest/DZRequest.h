@@ -21,4 +21,6 @@
 #import "DZBatchRequest.h"
 #import "DZChainRequest.h"
 
+#endif
+
 #endif /* DZRequest_h */

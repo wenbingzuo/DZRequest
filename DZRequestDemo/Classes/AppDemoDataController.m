@@ -38,11 +38,11 @@
 - (void)sendLoginRequest:(NSString *)name password:(NSString *)password callback:(AppDemoDataCompletionCallback)callback {
     self.loginRequest.username = name;
     self.loginRequest.password = password;
-    self.loginRequest.responseFilterCallback = ^BOOL(DZBaseRequest *request) {
+    self.loginRequest.responseFilterCallback = ^NSError *(DZBaseRequest *request) {
         if ([request.responseObject[@"data"][@"activated"] boolValue]) {
-            return YES;
+            return nil;
         } else {
-            return NO;
+            return nil;
         }
     };
     
