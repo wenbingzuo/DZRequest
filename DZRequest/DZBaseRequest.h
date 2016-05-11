@@ -45,20 +45,20 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 
 @property (nonatomic, copy) NSString *requestBaseURL;
 @property (nonatomic, copy) NSString *requestURL;
-@property (nonatomic, assign) DZRequestMethod requestMethod; ///<default is `DZRequestMethodGET`.
-@property (nonatomic, assign) NSTimeInterval requestTimeoutInterval; ///<default is 20.
+@property (nonatomic, assign) DZRequestMethod requestMethod;
+@property (nonatomic, assign) NSTimeInterval requestTimeoutInterval;
 @property (nonatomic, strong) NSDictionary *requestDefaultHeader;
 @property (nonatomic, strong) NSDictionary *requestHeader;
 @property (nonatomic, strong) id requestParameters;
 @property (nonatomic, copy) DZRequestConstructionCallback requestConstructionCallback;
 @property (nonatomic, assign) DZRequestSerializerType requestSerializerType;
-@property (nonatomic, assign) DZResponseSerializerType responseSerializerType;
 
 #pragma mark - Response
 ///==============================================
 /// @name Response
 ///==============================================
 
+@property (nonatomic, assign) DZResponseSerializerType responseSerializerType;
 @property (nonatomic, strong) id responseObject;
 @property (nonatomic, strong) NSError *error;
 @property (nonatomic, assign, readonly) NSInteger responseStatusCode;
@@ -75,14 +75,17 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 - (void)start;
 - (void)startRequestWithSuccessCallback:(DZRequestCompletionCallback)success failureCallback:(DZRequestCompletionCallback)failure;
 - (void)setSuccessCallback:(DZRequestCompletionCallback)success failure:(DZRequestCompletionCallback)failure;
-
 - (void)cancel;
 
 @end
 
 @interface DZBaseRequest (DZRequestAdd)
 
-@property (nonatomic, copy) BOOL (^responseFilterCallback)(DZBaseRequest *request);
+/**
+ *  Not used by default. This is a convenient property to construct your own request.
+ *  @see `DZChainRequest.m` and `DZBatchRequest.m`
+ */
+@property (nonatomic, copy) NSError * (^responseFilterCallback)(DZBaseRequest *request);
 
 @end
 

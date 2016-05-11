@@ -20,34 +20,24 @@ typedef void(^DZBatchRequestCompletionCallback)(DZBatchRequest *batchRequest);
 
 @interface DZBatchRequest : NSObject
 
+/// The requests ran in the receiver.
 @property (nonatomic, strong, readonly) NSArray *requests;
 
 /**
- *  初始化方法，只能用这个初始化方法，要么就不管用.
- *
- *  @param requests 请求数组，这个数组中的请求不能是相同的，若有相同的则会去掉后面的.
+ *  When receiver has been told to cancel, the error will be `NSURLErrorCancelled` for the `code`.
  */
-- (instancetype)initWithRequests:(NSArray<DZBaseRequest *>*) requests;
+@property (nonatomic, strong, readonly) NSError *error;
 
-/**
- *  失败返回的错误
- *  @discussion 这个错误是最近的一个错误, 当`cancelWhenErrorOccured`为`YES`时，`error`可能是`NSURLErrorCancelled`.
- */
-@property (nonatomic, strong) NSError *error;
+/// The current state of the receiver.
+@property (nonatomic, assign, readonly) DZBatchRequestState state;
 
-/// 当前请求的状态.
-@property (nonatomic, assign) DZBatchRequestState state;
+@property (nonatomic, assign) BOOL cancelWhenErrorOccur;
 
-/// 成功回调，只有所有的请求都成功才会回调.
 @property (nonatomic, copy) DZBatchRequestCompletionCallback batchRequestSuccessCallback;
-
-/// 失败回调，只要有一个请求失败就会回调.
 @property (nonatomic, copy) DZBatchRequestCompletionCallback batchRequestFailureCallback;
 
-/// 成功和失败的回调队列，默认是主队列
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
 
-/// 开始请求.
 - (void)start;
 
 /**
@@ -60,5 +50,18 @@ typedef void(^DZBatchRequestCompletionCallback)(DZBatchRequest *batchRequest);
 
 /// 取消当前的请求.
 - (void)cancel;
+
+#pragma mark - Initialization
+///---------------------
+/// @name Initialization
+///---------------------
+
+/**
+ *  Initializes a `DZBatchRequest` object with the specified requests.
+ *
+ *  @param requests The requests for the receiver. If same requests contained in this array,
+ *                  the later will be ignored.
+ */
+- (instancetype)initWithRequests:(NSArray<DZBaseRequest *>*) requests;
 
 @end

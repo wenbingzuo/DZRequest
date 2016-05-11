@@ -53,11 +53,11 @@
 
 @dynamic responseFilterCallback;
 
-- (void)setResponseFilterCallback:(BOOL (^)(DZBaseRequest *))responseFilterCallback {
+- (void)setResponseFilterCallback:(NSError * (^)(DZBaseRequest *))responseFilterCallback {
     objc_setAssociatedObject(self, _cmd, responseFilterCallback, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (BOOL (^)(DZBaseRequest *))responseFilterCallback {
+- (NSError * (^)(DZBaseRequest *))responseFilterCallback {
     return objc_getAssociatedObject(self, @selector(setResponseFilterCallback:));
 }
 

@@ -14,6 +14,8 @@
 @interface DZBatchRequest ()
 
 @property (nonatomic, strong, readwrite) NSArray *requests;
+@property (nonatomic, strong, readwrite) NSError *error;
+@property (nonatomic, assign, readwrite) DZBatchRequestState state;
 
 @end
 
@@ -24,6 +26,7 @@
     if (self) {
         self.completionQueue = dispatch_get_main_queue();
         self.state = DZBatchRequestStateIdle;
+        self.cancelWhenErrorOccur = YES;
         
         NSMutableArray *array = [NSMutableArray array];
         for (DZBaseRequest *request in requests) {
@@ -56,12 +59,26 @@
             @weakify(self)
             [request startRequestWithSuccessCallback:^(__kindof DZBaseRequest *request) {
                 dispatch_group_leave(group);
+                
+                @strongify(self)
+                if (self.cancelWhenErrorOccur && flag) {
+                    if (!request.responseFilterCallback) return;
+                    
+                    NSError *blockError = request.responseFilterCallback(request);
+                    if (!blockError) return;
+                    
+                    error = blockError;
+                    flag = NO;
+                    for (DZBaseRequest *request in self.requests) {
+                        [request cancel];
+                    }
+                }
             } failureCallback:^(__kindof DZBaseRequest *request) {
                 error = request.error;
                 dispatch_group_leave(group);
                 
                 @strongify(self)
-                if (flag && !request.responseFilterCallback?YES:request.responseFilterCallback(request)) {
+                if (self.cancelWhenErrorOccur && flag) {
                     flag = NO;
                     for (DZBaseRequest *request in self.requests) {
                         [request cancel];

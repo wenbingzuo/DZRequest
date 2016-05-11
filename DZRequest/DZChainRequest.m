@@ -43,22 +43,30 @@
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             [request startRequestWithSuccessCallback:^(__kindof DZBaseRequest *request) {
                 @strongify(self)
-                BOOL goOn = !request.responseFilterCallback?YES:request.responseFilterCallback( request);
-                if (!goOn) {
-                    lastRequest = request;
-                    *stop = YES;
+                
+                if (request.responseFilterCallback) {
+                    NSError *blockError = request.responseFilterCallback(request);
+                    if (blockError) {
+                        self.error = blockError;
+                        lastRequest = request;
+                        *stop = YES;
+                    }
                 }
                 if (idx == self.requests.count-1) {
                     lastRequest = request;
                 }
+                
                 dispatch_semaphore_signal(semaphore);
             } failureCallback:^(__kindof DZBaseRequest *request) {
                 @strongify(self)
+                
                 self.error = request.error;
                 lastRequest = request;
                 *stop = YES;
+                
                 dispatch_semaphore_signal(semaphore);
             }];
+            
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
         }];
         
