@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AppNormalViewController">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KVJ-k7-lci">
+                    <rect key="frame" x="280" y="161" width="40" height="30"/>
+                    <state key="normal" title="POST"/>
+                    <connections>
+                        <action selector="sendPostRequest:" destination="-1" eventType="touchUpInside" id="AS5-yV-nSw"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f5H-ST-KC0">
+                    <rect key="frame" x="270" y="238" width="60" height="30"/>
+                    <state key="normal" title="文件上传"/>
+                    <connections>
+                        <action selector="sendUploadRequest:" destination="-1" eventType="touchUpInside" id="78m-bn-dDt"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1bn-bb-hYO">
+                    <rect key="frame" x="285" y="93" width="30" height="30"/>
+                    <state key="normal" title="GET"/>
+                    <connections>
+                        <action selector="sendGetRequest:" destination="-1" eventType="touchUpInside" id="AoY-Sp-o4R"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="KVJ-k7-lci" firstAttribute="top" secondItem="1bn-bb-hYO" secondAttribute="bottom" constant="38" id="5Yx-7A-MAw"/>
+                <constraint firstItem="f5H-ST-KC0" firstAttribute="top" secondItem="KVJ-k7-lci" secondAttribute="bottom" constant="47" id="CAe-MI-7GI"/>
+                <constraint firstItem="1bn-bb-hYO" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="XiA-82-yti"/>
+                <constraint firstItem="1bn-bb-hYO" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="93" id="byT-dy-gYe"/>
+                <constraint firstItem="KVJ-k7-lci" firstAttribute="centerX" secondItem="1bn-bb-hYO" secondAttribute="centerX" id="tb4-da-s6h"/>
+                <constraint firstItem="f5H-ST-KC0" firstAttribute="centerX" secondItem="1bn-bb-hYO" secondAttribute="centerX" id="yrE-kI-e2k"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

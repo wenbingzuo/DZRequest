@@ -202,7 +202,6 @@
 
 - (void)removeRequest:(DZBaseRequest *)request {
     [request.task cancel];
-//    [self _removeTask:request];
 }
 
 @end
