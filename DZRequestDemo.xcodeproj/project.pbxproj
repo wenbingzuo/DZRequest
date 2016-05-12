@@ -8,11 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4352D1AB0CDB020709BD1665 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB04162B6EFC0EBE830E944E /* libPods.a */; };
-		8DAB09C81CE2FE2500750778 /* AppRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DAB09C71CE2FE2500750778 /* AppRootViewController.m */; };
-		8DAB09CE1CE3061800750778 /* AppNormalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DAB09CC1CE3061800750778 /* AppNormalViewController.m */; };
-		8DAB09CF1CE3061800750778 /* AppNormalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DAB09CD1CE3061800750778 /* AppNormalViewController.xib */; };
-		8DAB09D31CE306E100750778 /* AppSuggestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DAB09D11CE306E100750778 /* AppSuggestViewController.m */; };
-		8DAB09D41CE306E100750778 /* AppSuggestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DAB09D21CE306E100750778 /* AppSuggestViewController.xib */; };
+		8DB31C9C1CE4997F0076CD18 /* DZSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB31C9B1CE4997F0076CD18 /* DZSignInViewController.m */; };
 		8DC063DC1CE0669400337AD4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063DB1CE0669400337AD4 /* main.m */; };
 		8DC063DF1CE0669400337AD4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063DE1CE0669400337AD4 /* AppDelegate.m */; };
 		8DC063E51CE0669400337AD4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DC063E31CE0669400337AD4 /* Main.storyboard */; };
@@ -26,17 +22,15 @@
 		8DC064081CE066A500337AD4 /* DZRequestConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063FE1CE066A500337AD4 /* DZRequestConst.m */; };
 		8DC064091CE066A500337AD4 /* DZRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC064001CE066A500337AD4 /* DZRequestManager.m */; };
 		8DC064171CE0672700337AD4 /* NSMutableDictionary+DZRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC064161CE0672700337AD4 /* NSMutableDictionary+DZRequest.m */; };
+		8DDD014D1CE4E25A004FFF47 /* DZSignInRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DDD014C1CE4E25A004FFF47 /* DZSignInRequest.m */; };
+		8DDD014F1CE4EA75004FFF47 /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8DDD014E1CE4EA75004FFF47 /* avatar.jpg */; };
+		8DDD01521CE4EA99004FFF47 /* DZChangeAvatarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DDD01511CE4EA99004FFF47 /* DZChangeAvatarViewController.m */; };
+		8DDD01551CE4EB05004FFF47 /* DZChangeAvatarRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DDD01541CE4EB05004FFF47 /* DZChangeAvatarRequest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8DAB09C61CE2FE2500750778 /* AppRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppRootViewController.h; sourceTree = "<group>"; };
-		8DAB09C71CE2FE2500750778 /* AppRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppRootViewController.m; sourceTree = "<group>"; };
-		8DAB09CB1CE3061800750778 /* AppNormalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppNormalViewController.h; sourceTree = "<group>"; };
-		8DAB09CC1CE3061800750778 /* AppNormalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppNormalViewController.m; sourceTree = "<group>"; };
-		8DAB09CD1CE3061800750778 /* AppNormalViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AppNormalViewController.xib; sourceTree = "<group>"; };
-		8DAB09D01CE306E100750778 /* AppSuggestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppSuggestViewController.h; sourceTree = "<group>"; };
-		8DAB09D11CE306E100750778 /* AppSuggestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppSuggestViewController.m; sourceTree = "<group>"; };
-		8DAB09D21CE306E100750778 /* AppSuggestViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AppSuggestViewController.xib; sourceTree = "<group>"; };
+		8DB31C9A1CE4997F0076CD18 /* DZSignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZSignInViewController.h; sourceTree = "<group>"; };
+		8DB31C9B1CE4997F0076CD18 /* DZSignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZSignInViewController.m; sourceTree = "<group>"; };
 		8DC063D71CE0669400337AD4 /* DZRequestDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DZRequestDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DC063DB1CE0669400337AD4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8DC063DD1CE0669400337AD4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -62,6 +56,13 @@
 		8DC064001CE066A500337AD4 /* DZRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZRequestManager.m; sourceTree = "<group>"; };
 		8DC064151CE0672700337AD4 /* NSMutableDictionary+DZRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+DZRequest.h"; sourceTree = "<group>"; };
 		8DC064161CE0672700337AD4 /* NSMutableDictionary+DZRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+DZRequest.m"; sourceTree = "<group>"; };
+		8DDD014B1CE4E25A004FFF47 /* DZSignInRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZSignInRequest.h; sourceTree = "<group>"; };
+		8DDD014C1CE4E25A004FFF47 /* DZSignInRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZSignInRequest.m; sourceTree = "<group>"; };
+		8DDD014E1CE4EA75004FFF47 /* avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = avatar.jpg; sourceTree = "<group>"; };
+		8DDD01501CE4EA99004FFF47 /* DZChangeAvatarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZChangeAvatarViewController.h; sourceTree = "<group>"; };
+		8DDD01511CE4EA99004FFF47 /* DZChangeAvatarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZChangeAvatarViewController.m; sourceTree = "<group>"; };
+		8DDD01531CE4EB05004FFF47 /* DZChangeAvatarRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZChangeAvatarRequest.h; sourceTree = "<group>"; };
+		8DDD01541CE4EB05004FFF47 /* DZChangeAvatarRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZChangeAvatarRequest.m; sourceTree = "<group>"; };
 		B8EE35B5FB72FF2DE852D598 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		BB04162B6EFC0EBE830E944E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB3D176F5003CE76331CC6F4 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -87,26 +88,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		8DAB09C91CE300FB00750778 /* Normal */ = {
-			isa = PBXGroup;
-			children = (
-				8DAB09CB1CE3061800750778 /* AppNormalViewController.h */,
-				8DAB09CC1CE3061800750778 /* AppNormalViewController.m */,
-				8DAB09CD1CE3061800750778 /* AppNormalViewController.xib */,
-			);
-			name = Normal;
-			sourceTree = "<group>";
-		};
-		8DAB09CA1CE305EE00750778 /* Suggest */ = {
-			isa = PBXGroup;
-			children = (
-				8DAB09D01CE306E100750778 /* AppSuggestViewController.h */,
-				8DAB09D11CE306E100750778 /* AppSuggestViewController.m */,
-				8DAB09D21CE306E100750778 /* AppSuggestViewController.xib */,
-			);
-			name = Suggest;
-			sourceTree = "<group>";
-		};
 		8DC063CE1CE0669400337AD4 = {
 			isa = PBXGroup;
 			children = (
@@ -129,7 +110,15 @@
 		8DC063D91CE0669400337AD4 /* DZRequestDemo */ = {
 			isa = PBXGroup;
 			children = (
-				8DC0640B1CE066D900337AD4 /* Classes */,
+				8DDD014E1CE4EA75004FFF47 /* avatar.jpg */,
+				8DDD014B1CE4E25A004FFF47 /* DZSignInRequest.h */,
+				8DDD014C1CE4E25A004FFF47 /* DZSignInRequest.m */,
+				8DDD01531CE4EB05004FFF47 /* DZChangeAvatarRequest.h */,
+				8DDD01541CE4EB05004FFF47 /* DZChangeAvatarRequest.m */,
+				8DB31C9A1CE4997F0076CD18 /* DZSignInViewController.h */,
+				8DB31C9B1CE4997F0076CD18 /* DZSignInViewController.m */,
+				8DDD01501CE4EA99004FFF47 /* DZChangeAvatarViewController.h */,
+				8DDD01511CE4EA99004FFF47 /* DZChangeAvatarViewController.m */,
 				8DC063DA1CE0669400337AD4 /* Supporting Files */,
 			);
 			path = DZRequestDemo;
@@ -147,8 +136,6 @@
 				8DC064151CE0672700337AD4 /* NSMutableDictionary+DZRequest.h */,
 				8DC064161CE0672700337AD4 /* NSMutableDictionary+DZRequest.m */,
 				8DC063DB1CE0669400337AD4 /* main.m */,
-				8DAB09C61CE2FE2500750778 /* AppRootViewController.h */,
-				8DAB09C71CE2FE2500750778 /* AppRootViewController.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -160,28 +147,19 @@
 				8DC063F31CE066A500337AD4 /* DZBaseRequest.m */,
 				8DC063F41CE066A500337AD4 /* DZBatchRequest.h */,
 				8DC063F51CE066A500337AD4 /* DZBatchRequest.m */,
-				8DC063F61CE066A500337AD4 /* DZBatchRequestManager.h */,
-				8DC063F71CE066A500337AD4 /* DZBatchRequestManager.m */,
 				8DC063F81CE066A500337AD4 /* DZChainRequest.h */,
 				8DC063F91CE066A500337AD4 /* DZChainRequest.m */,
+				8DC063FF1CE066A500337AD4 /* DZRequestManager.h */,
+				8DC064001CE066A500337AD4 /* DZRequestManager.m */,
+				8DC063F61CE066A500337AD4 /* DZBatchRequestManager.h */,
+				8DC063F71CE066A500337AD4 /* DZBatchRequestManager.m */,
 				8DC063FA1CE066A500337AD4 /* DZChainRequestManager.h */,
 				8DC063FB1CE066A500337AD4 /* DZChainRequestManager.m */,
 				8DC063FD1CE066A500337AD4 /* DZRequestConst.h */,
 				8DC063FE1CE066A500337AD4 /* DZRequestConst.m */,
-				8DC063FF1CE066A500337AD4 /* DZRequestManager.h */,
-				8DC064001CE066A500337AD4 /* DZRequestManager.m */,
 				8DC063FC1CE066A500337AD4 /* DZRequest.h */,
 			);
 			path = DZRequest;
-			sourceTree = "<group>";
-		};
-		8DC0640B1CE066D900337AD4 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				8DAB09C91CE300FB00750778 /* Normal */,
-				8DAB09CA1CE305EE00750778 /* Suggest */,
-			);
-			path = Classes;
 			sourceTree = "<group>";
 		};
 		BAA5B5FD9269F32C5E0780F8 /* Pods */ = {
@@ -253,9 +231,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DAB09D41CE306E100750778 /* AppSuggestViewController.xib in Resources */,
+				8DDD014F1CE4EA75004FFF47 /* avatar.jpg in Resources */,
 				8DC063EA1CE0669400337AD4 /* LaunchScreen.storyboard in Resources */,
-				8DAB09CF1CE3061800750778 /* AppNormalViewController.xib in Resources */,
 				8DC063E71CE0669400337AD4 /* Assets.xcassets in Resources */,
 				8DC063E51CE0669400337AD4 /* Main.storyboard in Resources */,
 			);
@@ -319,16 +296,17 @@
 				8DC064051CE066A500337AD4 /* DZBatchRequestManager.m in Sources */,
 				8DC064031CE066A500337AD4 /* DZBaseRequest.m in Sources */,
 				8DC064061CE066A500337AD4 /* DZChainRequest.m in Sources */,
-				8DAB09CE1CE3061800750778 /* AppNormalViewController.m in Sources */,
+				8DB31C9C1CE4997F0076CD18 /* DZSignInViewController.m in Sources */,
+				8DDD01551CE4EB05004FFF47 /* DZChangeAvatarRequest.m in Sources */,
 				8DC064171CE0672700337AD4 /* NSMutableDictionary+DZRequest.m in Sources */,
-				8DAB09C81CE2FE2500750778 /* AppRootViewController.m in Sources */,
 				8DC063DF1CE0669400337AD4 /* AppDelegate.m in Sources */,
-				8DAB09D31CE306E100750778 /* AppSuggestViewController.m in Sources */,
 				8DC063DC1CE0669400337AD4 /* main.m in Sources */,
+				8DDD014D1CE4E25A004FFF47 /* DZSignInRequest.m in Sources */,
 				8DC064081CE066A500337AD4 /* DZRequestConst.m in Sources */,
 				8DC064041CE066A500337AD4 /* DZBatchRequest.m in Sources */,
 				8DC064071CE066A500337AD4 /* DZChainRequestManager.m in Sources */,
 				8DC064091CE066A500337AD4 /* DZRequestManager.m in Sources */,
+				8DDD01521CE4EA99004FFF47 /* DZChangeAvatarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
