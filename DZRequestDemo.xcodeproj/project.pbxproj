@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4352D1AB0CDB020709BD1665 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB04162B6EFC0EBE830E944E /* libPods.a */; };
+		8D0998881CE620CB0083295F /* DZChainRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D0998871CE620CB0083295F /* DZChainRequestViewController.m */; };
 		8DB31C9C1CE4997F0076CD18 /* DZSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB31C9B1CE4997F0076CD18 /* DZSignInViewController.m */; };
 		8DC063DC1CE0669400337AD4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063DB1CE0669400337AD4 /* main.m */; };
 		8DC063DF1CE0669400337AD4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063DE1CE0669400337AD4 /* AppDelegate.m */; };
@@ -16,11 +17,8 @@
 		8DC063EA1CE0669400337AD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DC063E81CE0669400337AD4 /* LaunchScreen.storyboard */; };
 		8DC064031CE066A500337AD4 /* DZBaseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063F31CE066A500337AD4 /* DZBaseRequest.m */; };
 		8DC064041CE066A500337AD4 /* DZBatchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063F51CE066A500337AD4 /* DZBatchRequest.m */; };
-		8DC064051CE066A500337AD4 /* DZBatchRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063F71CE066A500337AD4 /* DZBatchRequestManager.m */; };
 		8DC064061CE066A500337AD4 /* DZChainRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063F91CE066A500337AD4 /* DZChainRequest.m */; };
-		8DC064071CE066A500337AD4 /* DZChainRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063FB1CE066A500337AD4 /* DZChainRequestManager.m */; };
 		8DC064081CE066A500337AD4 /* DZRequestConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063FE1CE066A500337AD4 /* DZRequestConst.m */; };
-		8DC064091CE066A500337AD4 /* DZRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC064001CE066A500337AD4 /* DZRequestManager.m */; };
 		8DC064171CE0672700337AD4 /* NSMutableDictionary+DZRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC064161CE0672700337AD4 /* NSMutableDictionary+DZRequest.m */; };
 		8DDD014D1CE4E25A004FFF47 /* DZSignInRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DDD014C1CE4E25A004FFF47 /* DZSignInRequest.m */; };
 		8DDD014F1CE4EA75004FFF47 /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8DDD014E1CE4EA75004FFF47 /* avatar.jpg */; };
@@ -29,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8D0998861CE620CB0083295F /* DZChainRequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZChainRequestViewController.h; sourceTree = "<group>"; };
+		8D0998871CE620CB0083295F /* DZChainRequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZChainRequestViewController.m; sourceTree = "<group>"; };
 		8DB31C9A1CE4997F0076CD18 /* DZSignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZSignInViewController.h; sourceTree = "<group>"; };
 		8DB31C9B1CE4997F0076CD18 /* DZSignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZSignInViewController.m; sourceTree = "<group>"; };
 		8DC063D71CE0669400337AD4 /* DZRequestDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DZRequestDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,17 +43,11 @@
 		8DC063F31CE066A500337AD4 /* DZBaseRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZBaseRequest.m; sourceTree = "<group>"; };
 		8DC063F41CE066A500337AD4 /* DZBatchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZBatchRequest.h; sourceTree = "<group>"; };
 		8DC063F51CE066A500337AD4 /* DZBatchRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZBatchRequest.m; sourceTree = "<group>"; };
-		8DC063F61CE066A500337AD4 /* DZBatchRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZBatchRequestManager.h; sourceTree = "<group>"; };
-		8DC063F71CE066A500337AD4 /* DZBatchRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZBatchRequestManager.m; sourceTree = "<group>"; };
 		8DC063F81CE066A500337AD4 /* DZChainRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZChainRequest.h; sourceTree = "<group>"; };
 		8DC063F91CE066A500337AD4 /* DZChainRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZChainRequest.m; sourceTree = "<group>"; };
-		8DC063FA1CE066A500337AD4 /* DZChainRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZChainRequestManager.h; sourceTree = "<group>"; };
-		8DC063FB1CE066A500337AD4 /* DZChainRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZChainRequestManager.m; sourceTree = "<group>"; };
 		8DC063FC1CE066A500337AD4 /* DZRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZRequest.h; sourceTree = "<group>"; };
 		8DC063FD1CE066A500337AD4 /* DZRequestConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZRequestConst.h; sourceTree = "<group>"; };
 		8DC063FE1CE066A500337AD4 /* DZRequestConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZRequestConst.m; sourceTree = "<group>"; };
-		8DC063FF1CE066A500337AD4 /* DZRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZRequestManager.h; sourceTree = "<group>"; };
-		8DC064001CE066A500337AD4 /* DZRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZRequestManager.m; sourceTree = "<group>"; };
 		8DC064151CE0672700337AD4 /* NSMutableDictionary+DZRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+DZRequest.h"; sourceTree = "<group>"; };
 		8DC064161CE0672700337AD4 /* NSMutableDictionary+DZRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+DZRequest.m"; sourceTree = "<group>"; };
 		8DDD014B1CE4E25A004FFF47 /* DZSignInRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZSignInRequest.h; sourceTree = "<group>"; };
@@ -115,6 +109,8 @@
 				8DDD014C1CE4E25A004FFF47 /* DZSignInRequest.m */,
 				8DDD01531CE4EB05004FFF47 /* DZChangeAvatarRequest.h */,
 				8DDD01541CE4EB05004FFF47 /* DZChangeAvatarRequest.m */,
+				8D0998861CE620CB0083295F /* DZChainRequestViewController.h */,
+				8D0998871CE620CB0083295F /* DZChainRequestViewController.m */,
 				8DB31C9A1CE4997F0076CD18 /* DZSignInViewController.h */,
 				8DB31C9B1CE4997F0076CD18 /* DZSignInViewController.m */,
 				8DDD01501CE4EA99004FFF47 /* DZChangeAvatarViewController.h */,
@@ -149,12 +145,6 @@
 				8DC063F51CE066A500337AD4 /* DZBatchRequest.m */,
 				8DC063F81CE066A500337AD4 /* DZChainRequest.h */,
 				8DC063F91CE066A500337AD4 /* DZChainRequest.m */,
-				8DC063FF1CE066A500337AD4 /* DZRequestManager.h */,
-				8DC064001CE066A500337AD4 /* DZRequestManager.m */,
-				8DC063F61CE066A500337AD4 /* DZBatchRequestManager.h */,
-				8DC063F71CE066A500337AD4 /* DZBatchRequestManager.m */,
-				8DC063FA1CE066A500337AD4 /* DZChainRequestManager.h */,
-				8DC063FB1CE066A500337AD4 /* DZChainRequestManager.m */,
 				8DC063FD1CE066A500337AD4 /* DZRequestConst.h */,
 				8DC063FE1CE066A500337AD4 /* DZRequestConst.m */,
 				8DC063FC1CE066A500337AD4 /* DZRequest.h */,
@@ -293,7 +283,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DC064051CE066A500337AD4 /* DZBatchRequestManager.m in Sources */,
 				8DC064031CE066A500337AD4 /* DZBaseRequest.m in Sources */,
 				8DC064061CE066A500337AD4 /* DZChainRequest.m in Sources */,
 				8DB31C9C1CE4997F0076CD18 /* DZSignInViewController.m in Sources */,
@@ -304,8 +293,7 @@
 				8DDD014D1CE4E25A004FFF47 /* DZSignInRequest.m in Sources */,
 				8DC064081CE066A500337AD4 /* DZRequestConst.m in Sources */,
 				8DC064041CE066A500337AD4 /* DZBatchRequest.m in Sources */,
-				8DC064071CE066A500337AD4 /* DZChainRequestManager.m in Sources */,
-				8DC064091CE066A500337AD4 /* DZRequestManager.m in Sources */,
+				8D0998881CE620CB0083295F /* DZChainRequestViewController.m in Sources */,
 				8DDD01521CE4EA99004FFF47 /* DZChangeAvatarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

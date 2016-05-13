@@ -33,15 +33,15 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 
 @interface DZBaseRequest : NSObject
 
-/// The task from `NSURLSession`.
+/// The data task from `NSURLSession`.
 @property (nonatomic, strong) NSURLSessionDataTask *task;
 
+/// 
 @property (nonatomic, assign) BOOL showActivityIndicator;
 
-#pragma mark - Request
-///==============================================
-/// @name Request
-///==============================================
+///----------------------------
+/// @name Request Configuration
+///----------------------------
 
 @property (nonatomic, copy) NSString *requestBaseURL;
 @property (nonatomic, copy) NSString *requestURL;
@@ -53,20 +53,18 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 @property (nonatomic, copy) DZRequestConstructionCallback requestConstructionCallback;
 @property (nonatomic, assign) DZRequestSerializerType requestSerializerType;
 
-#pragma mark - Response
-///==============================================
+///---------------
 /// @name Response
-///==============================================
+///---------------
 
 @property (nonatomic, assign) DZResponseSerializerType responseSerializerType;
 @property (nonatomic, strong) id responseObject;
 @property (nonatomic, strong) NSError *error;
 @property (nonatomic, assign, readonly) NSInteger responseStatusCode;
 
-#pragma mark - Callback
-///==============================================
+///---------------
 /// @name Callback
-///==============================================
+///---------------
 
 @property (nonatomic, copy) DZRequestCompletionCallback requestSuccessCallback;
 @property (nonatomic, copy) DZRequestCompletionCallback requestFailureCallback;
@@ -89,3 +87,35 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 
 @end
 
+
+
+@interface DZRequestManager : NSObject
+
+///---------------------
+/// @name Instialization
+///---------------------
+
+/**
+ *  Creates and returns the shared `DZRequestManager` object.
+ */
++ (instancetype)sharedManager;
+
+///------------------------
+/// @name Managing Requests
+///------------------------
+
+/**
+ *  Add and start the request.
+ *
+ *  @param request The request to operate.
+ */
+- (void)addRequest:(DZBaseRequest *)request;
+
+/**
+ *  Cancel and remove the request.
+ *
+ *  @param request The request to cancel.
+ */
+- (void)removeRequest:(DZBaseRequest *)request;
+
+@end

@@ -65,3 +65,16 @@ typedef void(^DZBatchRequestCompletionCallback)(DZBatchRequest *batchRequest);
 - (instancetype)initWithRequests:(NSArray<DZBaseRequest *>*) requests;
 
 @end
+
+
+
+@interface DZBatchRequestManager : NSObject
+
++ (instancetype)sharedManager;
+
+- (void)addBatchRequest:(DZBatchRequest *)batchRequest;
+
+- (void)removeBatchRequest:(DZBatchRequest *)batchRequest;
+
+@end
+

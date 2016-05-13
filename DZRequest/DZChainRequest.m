@@ -9,7 +9,6 @@
 #import "DZChainRequest.h"
 #import "DZBaseRequest.h"
 #import "DZRequestConst.h"
-#import "DZChainRequestManager.h"
 
 @interface DZChainRequest ()
 
@@ -89,6 +88,40 @@
         [request cancel];
     }];
     [[DZChainRequestManager sharedManager] removeChainRequest:self];
+}
+
+@end
+
+
+
+@interface DZChainRequestManager ()
+
+@property (nonatomic, strong) NSMutableArray *chainRequests;
+
+@end
+
+@implementation DZChainRequestManager
+
++ (instancetype)sharedManager {
+    static DZChainRequestManager *instance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [DZChainRequestManager new];
+        instance.chainRequests = [NSMutableArray array];
+    });
+    return instance;
+}
+
+- (void)addChainRequest:(DZChainRequest *)chainRequest {
+    @synchronized (self) {
+        [self.chainRequests addObject:chainRequest];
+    }
+}
+
+- (void)removeChainRequest:(DZChainRequest *)chainRequest {
+    @synchronized (self) {
+        [self.chainRequests removeObject:chainRequest];
+    }
 }
 
 @end

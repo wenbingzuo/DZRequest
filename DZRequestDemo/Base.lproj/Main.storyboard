@@ -19,7 +19,50 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v5Q-Wq-hMW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-294" y="-598"/>
+            <point key="canvasLocation" x="-323" y="-598"/>
+        </scene>
+        <!--Chain Request View Controller-->
+        <scene sceneID="vCt-b1-WZO">
+            <objects>
+                <viewController id="6KR-bs-XTW" customClass="DZChainRequestViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tFK-d5-7dz"/>
+                        <viewControllerLayoutGuide type="bottom" id="K5D-gh-3Qr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="oHp-Gm-ZhR">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lXb-I0-JFt">
+                                <rect key="frame" x="236" y="285" width="129" height="30"/>
+                                <state key="normal" title="Start Chain Requst"/>
+                                <connections>
+                                    <action selector="sendChainRequest:" destination="6KR-bs-XTW" eventType="touchUpInside" id="Lrv-cj-msC"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not start!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mla-lA-aAO">
+                                <rect key="frame" x="20" y="244" width="560" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Mla-lA-aAO" firstAttribute="leading" secondItem="oHp-Gm-ZhR" secondAttribute="leading" constant="20" id="0z1-4M-aps"/>
+                            <constraint firstItem="lXb-I0-JFt" firstAttribute="top" secondItem="Mla-lA-aAO" secondAttribute="bottom" constant="20" id="1QT-Uq-W7a"/>
+                            <constraint firstAttribute="trailing" secondItem="Mla-lA-aAO" secondAttribute="trailing" constant="20" id="7vb-OL-cfa"/>
+                            <constraint firstItem="lXb-I0-JFt" firstAttribute="centerY" secondItem="oHp-Gm-ZhR" secondAttribute="centerY" id="Lf6-Y0-iPH"/>
+                            <constraint firstItem="lXb-I0-JFt" firstAttribute="centerX" secondItem="oHp-Gm-ZhR" secondAttribute="centerX" id="fX6-hq-uz1"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="hintLabel" destination="Mla-lA-aAO" id="Rvp-8f-Rym"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LSX-8L-cE1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="400" y="-1253"/>
         </scene>
         <!--SignIn-->
         <scene sceneID="H0h-f1-Vdf">
@@ -47,7 +90,7 @@
                                 <rect key="frame" x="278.5" y="248" width="43" height="30"/>
                                 <state key="normal" title="SignIn"/>
                                 <connections>
-                                    <segue destination="ABG-0h-VJ5" kind="show" id="zDr-qB-uq2"/>
+                                    <segue destination="ABG-0h-VJ5" kind="show" identifier="signIn" id="zDr-qB-uq2"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -63,7 +106,13 @@
                             <constraint firstItem="tHC-Qz-Vzk" firstAttribute="leading" secondItem="0Wf-eE-mqE" secondAttribute="leading" constant="20" id="zYa-om-yrv"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="SignIn" id="thp-fu-KpN"/>
+                    <navigationItem key="navigationItem" title="SignIn" id="thp-fu-KpN">
+                        <barButtonItem key="rightBarButtonItem" title="Chain" id="fUB-gm-NEd">
+                            <connections>
+                                <segue destination="6KR-bs-XTW" kind="show" identifier="chain" id="joA-wj-zBs"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="passwordTextField" destination="tHC-Qz-Vzk" id="VC7-ny-9g2"/>
                         <outlet property="usernameTextField" destination="icK-Kf-thz" id="Yvq-Jz-Kd3"/>

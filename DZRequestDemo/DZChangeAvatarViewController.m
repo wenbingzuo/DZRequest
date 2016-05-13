@@ -34,13 +34,10 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     self.changeAvatarRequest.avatar = [UIImage imageNamed:@"avatar.jpg"];
-//    @weakify(self)
+    @weakify(self)
     [self.changeAvatarRequest setUploadProgressCallback:^(NSProgress *progress) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            @strongify(self)
-//            self.progressView.progress = progress.fractionCompleted;
-//        });
-        DZLog(@"%f---%@", progress.fractionCompleted, [NSThread currentThread]);
+        @strongify(self)
+        self.progressView.progress = progress.fractionCompleted;
     }];
     [self.changeAvatarRequest startRequestWithSuccessCallback:^(__kindof DZBaseRequest *request) {
         DZLog(@"%@", request.responseObject);

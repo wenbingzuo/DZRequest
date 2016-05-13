@@ -59,3 +59,13 @@ typedef void(^DZChainRequestCompletionCallback)(DZChainRequest *chainRequest, DZ
 
 
 
+@interface DZChainRequestManager : NSObject
+
++ (instancetype)sharedManager;
+
+- (void)addChainRequest:(DZChainRequest *)chainRequest;
+
+- (void)removeChainRequest:(DZChainRequest *)chainRequest;
+
+@end
+
