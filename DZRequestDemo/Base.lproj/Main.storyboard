@@ -41,7 +41,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tHC-Qz-Vzk">
                                 <rect key="frame" x="20" y="181" width="560" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9lo-oG-vhs">
                                 <rect key="frame" x="278.5" y="248" width="43" height="30"/>
@@ -91,13 +91,23 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AYv-5Z-Bay">
+                                <rect key="frame" x="100" y="237" width="400" height="2"/>
+                            </progressView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="AYv-5Z-Bay" firstAttribute="centerX" secondItem="n9P-7C-lUh" secondAttribute="centerX" id="16s-eL-vD2"/>
                             <constraint firstItem="1ha-hM-cWo" firstAttribute="centerY" secondItem="n9P-7C-lUh" secondAttribute="centerY" id="2lq-rf-ty9"/>
+                            <constraint firstItem="1ha-hM-cWo" firstAttribute="top" secondItem="AYv-5Z-Bay" secondAttribute="bottom" constant="50" id="8Fb-bL-8VK"/>
+                            <constraint firstItem="AYv-5Z-Bay" firstAttribute="leading" secondItem="n9P-7C-lUh" secondAttribute="leading" constant="100" id="du2-3K-JWc"/>
+                            <constraint firstAttribute="trailing" secondItem="AYv-5Z-Bay" secondAttribute="trailing" constant="100" id="m3s-R4-PFy"/>
                             <constraint firstItem="1ha-hM-cWo" firstAttribute="centerX" secondItem="n9P-7C-lUh" secondAttribute="centerX" id="zCo-25-EXX"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="progressView" destination="AYv-5Z-Bay" id="WuI-lZ-X0c"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BIy-BD-9Qu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

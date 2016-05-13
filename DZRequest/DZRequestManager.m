@@ -12,6 +12,34 @@
 #import <AFNetworkActivityIndicatorManager.h>
 #import "DZRequestConst.h"
 
+
+static NSDictionary * NSHeadDictionaryFromRequest(DZBaseRequest *request) {
+    NSDictionary *defaultHeader = request.requestDefaultHeader;
+    NSDictionary *normalHeader = request.requestHeader;
+    
+    NSMutableDictionary *header = [NSMutableDictionary dictionaryWithDictionary:defaultHeader];
+    [header addEntriesFromDictionary:normalHeader];
+    return header;
+}
+
+static NSString * NSURLStringFromRequest(DZBaseRequest *request) {
+    NSString *detailURL = request.requestURL;
+    if ([[detailURL lowercaseString] hasPrefix:@"http"]) {
+        return detailURL;
+    }
+    
+    NSString *baseURL = request.requestBaseURL;
+    if ([[baseURL lowercaseString] hasPrefix:@"http"]) {
+        return [NSString stringWithFormat:@"%@%@", baseURL, detailURL.length==0?@"":detailURL];
+    } else {
+        return nil;
+    }
+}
+
+static NSString * NSHashStringFromTask(NSURLSessionDataTask *task) {
+    return [NSString stringWithFormat:@"%lu", (unsigned long)[task hash]];
+}
+
 @interface DZRequestManager ()
 
 @property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
@@ -42,37 +70,9 @@
 
 #pragma mark - Private
 
-- (NSString *)_buildRequestURLWithRequest:(DZBaseRequest *)request {
-    NSString *detailURL = request.requestURL;
-    if ([[detailURL lowercaseString] hasPrefix:@"http"]) {
-        return detailURL;
-    }
-    
-    NSString *baseURL = request.requestBaseURL;
-    if ([[baseURL lowercaseString] hasPrefix:@"http"]) {
-        return [NSString stringWithFormat:@"%@%@", baseURL, detailURL.length==0?@"":detailURL];
-    } else {
-        DZLog(@"Error, wrong URL format.");
-        return nil;
-    }
-}
-
-- (NSDictionary *)_buildRequestHeaderWithRequest:(DZBaseRequest *)request {
-    NSDictionary *defaultHeader = request.requestDefaultHeader;
-    NSDictionary *normalHeader = request.requestHeader;
-    
-    NSMutableDictionary *header = [NSMutableDictionary dictionaryWithDictionary:defaultHeader];
-    [header addEntriesFromDictionary:normalHeader];
-    return header;
-}
-
-- (NSString *)_taskHashKey:(NSURLSessionDataTask *)task {
-    return [NSString stringWithFormat:@"%lu", (unsigned long)[task hash]];
-}
-
 - (void)_addTask:(DZBaseRequest *)request {
     if (request.task) {
-        NSString *key = [self _taskHashKey:request.task];
+        NSString *key = NSHashStringFromTask(request.task);
         @synchronized(self) {
             [self.requests setValue:request forKey:key];
         }
@@ -80,14 +80,14 @@
 }
 
 - (void)_removeTask:(DZBaseRequest *)request {
-    NSString *key = [self _taskHashKey:request.task];
+    NSString *key = NSHashStringFromTask(request.task);
     @synchronized(self) {
         [self.requests removeObjectForKey:key];
     }
 }
 
 - (void)_handleResponse:(NSURLSessionDataTask *)task response:(id)responseObject error:(NSError *)error {
-    NSString *key = [self _taskHashKey:task];
+    NSString *key = NSHashStringFromTask(task);;
     DZBaseRequest *request = self.requests[key];
     request.responseObject = responseObject;
     request.error = error;
@@ -120,7 +120,7 @@
             break;
     }
     self.sessionManager.requestSerializer.timeoutInterval = request.requestTimeoutInterval;
-    NSDictionary *headers = [self _buildRequestHeaderWithRequest:request];
+    NSDictionary *headers = NSHeadDictionaryFromRequest(request);
     for (id field in headers.allKeys) {
         id value = headers[field];
         if ([field isKindOfClass:[NSString class]] && [value isKindOfClass:[NSString class]]) {
@@ -129,7 +129,6 @@
             DZLog(@"Error, the key and value in HTTPRequestHeaders should be string.");
         }
     }
-    
     
     DZResponseSerializerType responseSerializerType = request.responseSerializerType;
     switch (responseSerializerType) {
@@ -144,7 +143,7 @@
     }
     self.sessionManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html", @"text/xml", @"text/plain", @"text/json", @"text/javascript", @"image/png", @"image/jpeg", @"application/json", nil];
     
-    NSString *url = [self _buildRequestURLWithRequest:request];
+    NSString *url = NSURLStringFromRequest(request);
     DZRequestMethod method = request.requestMethod;
     id params = request.requestParameters;
     DZRequestConstructionCallback constructionBlock = request.requestConstructionCallback;
@@ -162,13 +161,17 @@
         
         case DZRequestMethodPOST: {
             if (constructionBlock) {
-                task = [self.sessionManager POST:url parameters:params constructingBodyWithBlock:constructionBlock progress:uploadProgressCallback success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                task = [self.sessionManager POST:url parameters:params constructingBodyWithBlock:constructionBlock progress:^(NSProgress * _Nonnull uploadProgress) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        uploadProgressCallback(uploadProgress);
+                    });
+                } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                     [self _handleResponse:task response:responseObject error:nil];
                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                     [self _handleResponse:task response:nil error:error];
                 }];
             } else {
-                task = [self.sessionManager POST:url parameters:params progress:uploadProgressCallback success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                task = [self.sessionManager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                     [self _handleResponse:task response:responseObject error:nil];
                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                     [self _handleResponse:task response:nil error:error];

@@ -23,6 +23,9 @@
 - (DZSignInRequest *)signInRequest {
     if (!_signInRequest) {
         _signInRequest = [DZSignInRequest new];
+        _signInRequest.uploadProgressCallback = ^(NSProgress *progress) {
+            DZLog(@"%f---%@", progress.fractionCompleted, [NSThread currentThread]);
+        };
     }
     return _signInRequest;
 }
@@ -37,7 +40,7 @@
     __block BOOL success = NO;
     [self.signInRequest startRequestWithSuccessCallback:^(__kindof DZBaseRequest *request) {
         success = YES;
-        [[NSUserDefaults standardUserDefaults] setObject:request.responseObject[@"user"][@"access_token"] forKey:@"cookie"];
+        [[NSUserDefaults standardUserDefaults] setObject:request.responseObject[@"user"][@"access_token"] forKey:@"accessToken"];
         dispatch_semaphore_signal(semaphore);
     } failureCallback:^(__kindof DZBaseRequest *request) {
         success = NO;

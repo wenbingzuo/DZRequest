@@ -13,7 +13,7 @@
 
 - (NSDictionary *)requestDefaultHeader {
     NSMutableDictionary *header = [NSMutableDictionary dictionary];
-    [header dz_setNilableValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"cookie"]  forKey:@"Authorization"];
+    [header dz_setNilableValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"]  forKey:@"Authorization"];
     return header;
 }
 
