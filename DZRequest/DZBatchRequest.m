@@ -56,7 +56,7 @@
         dispatch_group_enter(group);
         dispatch_group_async(group, queue, ^{
             @weakify(self)
-            [request startRequestWithSuccessCallback:^(__kindof DZBaseRequest *request) {
+            [request startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
                 dispatch_group_leave(group);
                 
                 @strongify(self)
@@ -72,7 +72,7 @@
                         [request cancel];
                     }
                 }
-            } failureCallback:^(__kindof DZBaseRequest *request) {
+            } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
                 error = request.error;
                 dispatch_group_leave(group);
                 

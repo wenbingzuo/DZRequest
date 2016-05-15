@@ -39,10 +39,10 @@
         @strongify(self)
         self.progressView.progress = progress.fractionCompleted;
     }];
-    [self.changeAvatarRequest startRequestWithSuccessCallback:^(__kindof DZBaseRequest *request) {
-        DZLog(@"%@", request.responseObject);
-    } failureCallback:^(__kindof DZBaseRequest *request) {
-        DZLog(@"%@", request.error.localizedDescription);
+    [self.changeAvatarRequest startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
+        DZLog(@"%@", responseObject);
+    } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
+        DZLog(@"%@", error.localizedDescription);
     }];
 }
 

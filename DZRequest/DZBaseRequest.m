@@ -28,14 +28,14 @@
     [[DZRequestManager sharedManager] addRequest:self];
 }
 
-- (void)startRequestWithSuccessCallback:(DZRequestCompletionCallback)success failureCallback:(DZRequestCompletionCallback)failure {
+- (void)startRequestSuccessCallback:(DZRequestSuccessCallback)success failureCallback:(DZRequestFailureCallback)failure {
     [self setSuccessCallback:success failure:failure];
     [self start];
 }
 
-- (void)setSuccessCallback:(DZRequestCompletionCallback)success failure:(DZRequestCompletionCallback)failure {
-    self.requestSuccessCallback = success;
-    self.requestFailureCallback = failure;
+- (void)setSuccessCallback:(DZRequestSuccessCallback)success failure:(DZRequestFailureCallback)failure {
+    self.successCallback = success;
+    self.failureCallback = failure;
 }
 
 - (void)cancel {
@@ -44,6 +44,10 @@
 
 - (NSInteger)responseStatusCode {
     return [(NSHTTPURLResponse *)self.task.response statusCode];
+}
+
+- (void)dealloc {
+    DZLog(@"%@ dealloc", [self class]);
 }
 
 @end
@@ -144,12 +148,12 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
     request.error = error;
     
     if (!error) {
-        if (request.requestSuccessCallback) {
-            request.requestSuccessCallback(request);
+        if (request.successCallback) {
+            request.successCallback(request, responseObject);
         }
     } else {
-        if (request.requestFailureCallback) {
-            request.requestFailureCallback(request);
+        if (request.failureCallback) {
+            request.failureCallback(request, error);
         }
     }
     

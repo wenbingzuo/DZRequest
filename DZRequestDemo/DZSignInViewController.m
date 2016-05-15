@@ -40,11 +40,11 @@
     self.signInRequest.password = self.passwordTextField.text;
     
     __block BOOL success = NO;
-    [self.signInRequest startRequestWithSuccessCallback:^(__kindof DZBaseRequest *request) {
+    [self.signInRequest startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
         success = YES;
-        [[NSUserDefaults standardUserDefaults] setObject:request.responseObject[@"user"][@"access_token"] forKey:@"accessToken"];
+        [[NSUserDefaults standardUserDefaults] setObject:responseObject[@"user"][@"access_token"] forKey:@"accessToken"];
         dispatch_semaphore_signal(semaphore);
-    } failureCallback:^(__kindof DZBaseRequest *request) {
+    } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
         success = NO;
         dispatch_semaphore_signal(semaphore);
     }];

@@ -16,7 +16,8 @@ typedef NS_ENUM(NSUInteger, DZChainRequestState) {
     DZChainRequestStateCanceling, ///<取消
 };
 
-typedef void(^DZChainRequestCompletionCallback)(DZChainRequest *chainRequest, DZBaseRequest *request);
+typedef void(^DZChainRequestSuccessCallback)(DZChainRequest *chainRequest, __kindof DZBaseRequest *request, id responseObject);
+typedef void(^DZChainRequestFailureCallback)(DZChainRequest *chainRequest, __kindof DZBaseRequest *request, NSError *error);
 
 @interface DZChainRequest : NSObject
 
@@ -26,14 +27,15 @@ typedef void(^DZChainRequestCompletionCallback)(DZChainRequest *chainRequest, DZ
 /// 状态码非200区段的错误.
 @property (nonatomic, strong) NSError *error;
 
-/// 完成回调，可能成功，可能失败.
-@property (nonatomic, copy) DZChainRequestCompletionCallback completionCallback;
-
 /// 请求状态.
 @property (nonatomic, assign, readonly) DZChainRequestState state;
 
 /// 成功和失败的回调队列，默认是主队列
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
+
+@property (nonatomic, copy) DZChainRequestSuccessCallback successCallback;
+@property (nonatomic, copy) DZChainRequestFailureCallback failureCallback;
+
 
 /**
  *  初始化方法，请求会按照`requests`数组的顺序来依次请求.
@@ -45,12 +47,7 @@ typedef void(^DZChainRequestCompletionCallback)(DZChainRequest *chainRequest, DZ
 /// 开始请求.
 - (void)start;
 
-/**
- *  开始请求.
- *
- *  @param callback 完成回调，会覆盖之前设置的回调.
- */
-- (void)startChainRequestWithCompletionCallback:(DZChainRequestCompletionCallback)callback;
+- (void)startChainRequestSuccessCallback:(DZChainRequestSuccessCallback)success failureCallback:(DZChainRequestFailureCallback)failure;
 
 /// 取消请求.
 - (void)cancel;

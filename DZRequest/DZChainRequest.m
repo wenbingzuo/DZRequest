@@ -35,31 +35,31 @@
     [[DZChainRequestManager sharedManager] addChainRequest:self];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
+        __block NSError *lastError = nil;
+        __block id lastResponseObject = nil;
         __block DZBaseRequest *lastRequest = nil;
+        
         [self.requests enumerateObjectsUsingBlock:^(DZBaseRequest * _Nonnull request, NSUInteger idx, BOOL * _Nonnull stop) {
-            @weakify(self)
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            [request startRequestWithSuccessCallback:^(__kindof DZBaseRequest *request) {
-                @strongify(self)
+            
+            [request startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
+                lastError = nil;
+                lastResponseObject = responseObject;
+                lastRequest = request;
                 
                 if (request.responseFilterCallback) {
                     NSError *blockError = request.responseFilterCallback(request);
                     if (blockError) {
-                        self.error = blockError;
-                        lastRequest = request;
+                        lastError = blockError;
+                        lastResponseObject = nil;
                         *stop = YES;
                     }
                 }
-                if (idx == self.requests.count-1) {
-                    lastRequest = request;
-                }
                 
                 dispatch_semaphore_signal(semaphore);
-            } failureCallback:^(__kindof DZBaseRequest *request) {
-                @strongify(self)
-                
-                self.error = request.error;
+            } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
+                lastError = error;
+                lastResponseObject = nil;
                 lastRequest = request;
                 *stop = YES;
                 
@@ -71,14 +71,19 @@
         
         dispatch_async(self.completionQueue?self.completionQueue:dispatch_get_main_queue(), ^{
             self.state = DZChainRequestStateCompleted;
-            !self.completionCallback?:self.completionCallback(self, lastRequest);
+            if (lastError) {
+                !self.failureCallback?:self.failureCallback(self, lastRequest, lastError);
+            } else {
+                !self.successCallback?:self.successCallback(self, lastRequest, lastResponseObject);
+            }
             [[DZChainRequestManager sharedManager] removeChainRequest:self];
         });
     });
 }
 
-- (void)startChainRequestWithCompletionCallback:(DZChainRequestCompletionCallback)callback {
-    self.completionCallback = callback;
+- (void)startChainRequestSuccessCallback:(DZChainRequestSuccessCallback)success failureCallback:(DZChainRequestFailureCallback)failure {
+    self.successCallback = success;
+    self.failureCallback = failure;
     [self start];
 }
 
@@ -88,6 +93,10 @@
         [request cancel];
     }];
     [[DZChainRequestManager sharedManager] removeChainRequest:self];
+}
+
+- (void)dealloc {
+    DZLog(@"%@ dealloc", [self class]);
 }
 
 @end

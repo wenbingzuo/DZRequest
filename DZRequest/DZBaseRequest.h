@@ -27,7 +27,8 @@ typedef NS_ENUM(NSUInteger, DZResponseSerializerType) {
     DZResponseSerializerTypeJSON
 };
 
-typedef void(^DZRequestCompletionCallback)(__kindof DZBaseRequest *request);
+typedef void(^DZRequestSuccessCallback)(__kindof DZBaseRequest *request, id responseObject);
+typedef void(^DZRequestFailureCallback)(__kindof DZBaseRequest *request, NSError *error);
 typedef void(^DZRequestConstructionCallback)(id<AFMultipartFormData> formData);
 typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 
@@ -66,13 +67,14 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 /// @name Callback
 ///---------------
 
-@property (nonatomic, copy) DZRequestCompletionCallback requestSuccessCallback;
-@property (nonatomic, copy) DZRequestCompletionCallback requestFailureCallback;
+@property (nonatomic, copy) DZRequestSuccessCallback successCallback;
+@property (nonatomic, copy) DZRequestFailureCallback failureCallback;
 @property (nonatomic, copy) DZRequestUploadProgressCallback uploadProgressCallback;
 
 - (void)start;
-- (void)startRequestWithSuccessCallback:(DZRequestCompletionCallback)success failureCallback:(DZRequestCompletionCallback)failure;
-- (void)setSuccessCallback:(DZRequestCompletionCallback)success failure:(DZRequestCompletionCallback)failure;
+- (void)startRequestSuccessCallback:(DZRequestSuccessCallback)success failureCallback:(DZRequestFailureCallback)failure;
+
+- (void)setSuccessCallback:(DZRequestSuccessCallback)success failure:(DZRequestFailureCallback)failure;
 - (void)cancel;
 
 @end
