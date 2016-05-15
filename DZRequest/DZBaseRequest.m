@@ -47,7 +47,9 @@
 }
 
 - (void)dealloc {
+    DZLog(@"---------");
     DZLog(@"%@ dealloc", [self class]);
+    DZLog(@"---------");
 }
 
 @end

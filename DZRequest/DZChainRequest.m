@@ -76,6 +76,9 @@
             } else {
                 !self.successCallback?:self.successCallback(self, lastRequest, lastResponseObject);
             }
+            lastRequest = nil;
+            lastError = nil;
+            lastResponseObject = nil;
             [[DZChainRequestManager sharedManager] removeChainRequest:self];
         });
     });
