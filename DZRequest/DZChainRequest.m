@@ -29,6 +29,11 @@
     return self;
 }
 
+- (void)setSuccessCallback:(DZChainRequestSuccessCallback)success failureCallback:(DZChainRequestFailureCallback)failure {
+    self.successCallback = success;
+    self.failureCallback = failure;
+}
+
 - (void)start {
     if (self.state == DZChainRequestStateRunning) return;
     self.state = DZChainRequestStateRunning;

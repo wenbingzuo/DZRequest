@@ -16,7 +16,8 @@ typedef NS_ENUM(NSUInteger, DZBatchRequestState) {
     DZBatchRequestStateCanceling, ///< The receiver has been told to cancel.
 };
 
-typedef void(^DZBatchRequestCompletionCallback)(DZBatchRequest *batchRequest);
+typedef void(^DZBatchRequestSuccessCallback)(DZBatchRequest *batchRequest);
+typedef void(^DZBatchRequestFailureCallback)(DZBatchRequest *batchRequest, __kindof DZBaseRequest *request, NSError *error);
 
 @interface DZBatchRequest : NSObject
 
@@ -26,15 +27,14 @@ typedef void(^DZBatchRequestCompletionCallback)(DZBatchRequest *batchRequest);
 /**
  *  When receiver has been told to cancel, the error will be `NSURLErrorCancelled` for the `code`.
  */
-@property (nonatomic, strong, readonly) NSError *error;
 
 /// The current state of the receiver.
 @property (nonatomic, assign, readonly) DZBatchRequestState state;
 
 @property (nonatomic, assign) BOOL cancelWhenErrorOccur;
 
-@property (nonatomic, copy) DZBatchRequestCompletionCallback batchRequestSuccessCallback;
-@property (nonatomic, copy) DZBatchRequestCompletionCallback batchRequestFailureCallback;
+@property (nonatomic, copy) DZBatchRequestSuccessCallback successCallback;
+@property (nonatomic, copy) DZBatchRequestFailureCallback failureCallback;
 
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
 
@@ -46,7 +46,8 @@ typedef void(^DZBatchRequestCompletionCallback)(DZBatchRequest *batchRequest);
  *  @param success 成功回调.
  *  @param failure 失败回调.
  */
-- (void)startBatchRequestWithSuccessCallback:(DZBatchRequestCompletionCallback)success failureCallback:(DZBatchRequestCompletionCallback)failure;
+//- (void)startBatchRequestWithSuccessCallback:(DZBatchRequestCompletionCallback)success failureCallback:(DZBatchRequestCompletionCallback)failure;
+- (void)startBatchReqeustSuccessCallback:(DZBatchRequestSuccessCallback)success failureCallback:(DZBatchRequestFailureCallback)failure;
 
 /// 取消当前的请求.
 - (void)cancel;

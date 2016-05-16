@@ -21,6 +21,49 @@
             </objects>
             <point key="canvasLocation" x="-323" y="-598"/>
         </scene>
+        <!--Batch Request View Controller-->
+        <scene sceneID="Yvm-u3-fi3">
+            <objects>
+                <viewController id="6x8-WS-BBg" customClass="DZBatchRequestViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="YGB-jL-Kir"/>
+                        <viewControllerLayoutGuide type="bottom" id="25X-5p-TBM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="a5l-p2-U7Q">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IbC-O7-wjs">
+                                <rect key="frame" x="231" y="285" width="138" height="30"/>
+                                <state key="normal" title="Start Batch Request"/>
+                                <connections>
+                                    <action selector="sendBatchRequest:" destination="6x8-WS-BBg" eventType="touchUpInside" id="hUx-Ip-c1O"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NE2-Md-Xe2">
+                                <rect key="frame" x="20" y="244" width="560" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="NE2-Md-Xe2" secondAttribute="trailing" constant="20" id="1Fb-7F-xHg"/>
+                            <constraint firstItem="IbC-O7-wjs" firstAttribute="centerX" secondItem="a5l-p2-U7Q" secondAttribute="centerX" id="Dfh-02-vlg"/>
+                            <constraint firstItem="NE2-Md-Xe2" firstAttribute="leading" secondItem="a5l-p2-U7Q" secondAttribute="leading" constant="20" id="PmS-2L-lmc"/>
+                            <constraint firstItem="IbC-O7-wjs" firstAttribute="top" secondItem="NE2-Md-Xe2" secondAttribute="bottom" constant="20" id="fja-JJ-Fnu"/>
+                            <constraint firstItem="IbC-O7-wjs" firstAttribute="centerY" secondItem="a5l-p2-U7Q" secondAttribute="centerY" id="oJh-uo-G38"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="hintLabel" destination="NE2-Md-Xe2" id="YHf-9e-gza"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bdq-Qh-2yf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-323" y="-1267"/>
+        </scene>
         <!--Chain Request View Controller-->
         <scene sceneID="vCt-b1-WZO">
             <objects>
@@ -107,6 +150,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="SignIn" id="thp-fu-KpN">
+                        <barButtonItem key="leftBarButtonItem" title="Batch" id="tLi-Xx-59h">
+                            <connections>
+                                <segue destination="6x8-WS-BBg" kind="show" identifier="batch" id="nUq-eR-kxd"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Chain" id="fUB-gm-NEd">
                             <connections>
                                 <segue destination="6KR-bs-XTW" kind="show" identifier="chain" id="joA-wj-zBs"/>

@@ -33,6 +33,7 @@
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(nullable id)sender {
     
     if ([identifier isEqualToString:@"chain"]) return YES;
+    if ([identifier isEqualToString:@"batch"]) return YES;
     
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     

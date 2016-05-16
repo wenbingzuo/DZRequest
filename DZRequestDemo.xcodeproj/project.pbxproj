@@ -20,6 +20,7 @@
 		8DC064061CE066A500337AD4 /* DZChainRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063F91CE066A500337AD4 /* DZChainRequest.m */; };
 		8DC064081CE066A500337AD4 /* DZRequestConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC063FE1CE066A500337AD4 /* DZRequestConst.m */; };
 		8DC064171CE0672700337AD4 /* NSMutableDictionary+DZRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC064161CE0672700337AD4 /* NSMutableDictionary+DZRequest.m */; };
+		8DD28EF01CEA0B3A005A027B /* DZBatchRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DD28EEF1CEA0B3A005A027B /* DZBatchRequestViewController.m */; };
 		8DDD014D1CE4E25A004FFF47 /* DZSignInRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DDD014C1CE4E25A004FFF47 /* DZSignInRequest.m */; };
 		8DDD014F1CE4EA75004FFF47 /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8DDD014E1CE4EA75004FFF47 /* avatar.jpg */; };
 		8DDD01521CE4EA99004FFF47 /* DZChangeAvatarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DDD01511CE4EA99004FFF47 /* DZChangeAvatarViewController.m */; };
@@ -50,6 +51,8 @@
 		8DC063FE1CE066A500337AD4 /* DZRequestConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZRequestConst.m; sourceTree = "<group>"; };
 		8DC064151CE0672700337AD4 /* NSMutableDictionary+DZRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+DZRequest.h"; sourceTree = "<group>"; };
 		8DC064161CE0672700337AD4 /* NSMutableDictionary+DZRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+DZRequest.m"; sourceTree = "<group>"; };
+		8DD28EEE1CEA0B3A005A027B /* DZBatchRequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZBatchRequestViewController.h; sourceTree = "<group>"; };
+		8DD28EEF1CEA0B3A005A027B /* DZBatchRequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZBatchRequestViewController.m; sourceTree = "<group>"; };
 		8DDD014B1CE4E25A004FFF47 /* DZSignInRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZSignInRequest.h; sourceTree = "<group>"; };
 		8DDD014C1CE4E25A004FFF47 /* DZSignInRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZSignInRequest.m; sourceTree = "<group>"; };
 		8DDD014E1CE4EA75004FFF47 /* avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = avatar.jpg; sourceTree = "<group>"; };
@@ -111,6 +114,8 @@
 				8DDD01541CE4EB05004FFF47 /* DZChangeAvatarRequest.m */,
 				8D0998861CE620CB0083295F /* DZChainRequestViewController.h */,
 				8D0998871CE620CB0083295F /* DZChainRequestViewController.m */,
+				8DD28EEE1CEA0B3A005A027B /* DZBatchRequestViewController.h */,
+				8DD28EEF1CEA0B3A005A027B /* DZBatchRequestViewController.m */,
 				8DB31C9A1CE4997F0076CD18 /* DZSignInViewController.h */,
 				8DB31C9B1CE4997F0076CD18 /* DZSignInViewController.m */,
 				8DDD01501CE4EA99004FFF47 /* DZChangeAvatarViewController.h */,
@@ -283,6 +288,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8DD28EF01CEA0B3A005A027B /* DZBatchRequestViewController.m in Sources */,
 				8DC064031CE066A500337AD4 /* DZBaseRequest.m in Sources */,
 				8DC064061CE066A500337AD4 /* DZChainRequest.m in Sources */,
 				8DB31C9C1CE4997F0076CD18 /* DZSignInViewController.m in Sources */,

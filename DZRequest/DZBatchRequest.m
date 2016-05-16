@@ -13,7 +13,6 @@
 @interface DZBatchRequest ()
 
 @property (nonatomic, strong, readwrite) NSArray *requests;
-@property (nonatomic, strong, readwrite) NSError *error;
 @property (nonatomic, assign, readwrite) DZBatchRequestState state;
 
 @end
@@ -50,7 +49,8 @@
     dispatch_group_t group = dispatch_group_create();
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
-    __block NSError *error = nil;
+    __block DZBaseRequest *lastRequest = nil;
+    __block NSError *lastError = nil;
     __block BOOL flag = YES;
     for (DZBaseRequest *request in self.requests) {
         dispatch_group_enter(group);
@@ -63,17 +63,21 @@
                 if (self.cancelWhenErrorOccur && flag) {
                     if (!request.responseFilterCallback) return;
                     
-                    NSError *blockError = request.responseFilterCallback(request);
-                    if (!blockError) return;
+                    NSError *error = request.responseFilterCallback(request);
+                    if (!error) return;
                     
-                    error = blockError;
+                    lastRequest = request;
+                    lastError = error;
                     flag = NO;
                     for (DZBaseRequest *request in self.requests) {
                         [request cancel];
                     }
                 }
             } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
-                error = request.error;
+                if (error.code != NSURLErrorCancelled) {
+                    lastRequest = request;
+                    lastError = error;
+                }
                 dispatch_group_leave(group);
                 
                 @strongify(self)
@@ -91,20 +95,21 @@
     dispatch_group_notify(group, self.completionQueue?self.completionQueue:dispatch_get_main_queue(), ^{
         self.state = DZBatchRequestStateCompleted;
         
-        self.error = error;
-        if (self.error) {
-            !self.batchRequestFailureCallback?:self.batchRequestFailureCallback(self);
+        if (lastError) {
+            !self.failureCallback?:self.failureCallback(self, lastRequest, lastError);
         } else {
-            !self.batchRequestSuccessCallback?:self.batchRequestSuccessCallback(self);
+            !self.successCallback?:self.successCallback(self);
         }
+        lastError = nil;
+        lastRequest = nil;
         
         [[DZBatchRequestManager sharedManager] removeBatchRequest:self];
     });
 }
 
-- (void)startBatchRequestWithSuccessCallback:(DZBatchRequestCompletionCallback)success failureCallback:(DZBatchRequestCompletionCallback)failure {
-    self.batchRequestSuccessCallback = success;
-    self.batchRequestFailureCallback = failure;
+- (void)startBatchReqeustSuccessCallback:(DZBatchRequestSuccessCallback)success failureCallback:(DZBatchRequestFailureCallback)failure {
+    self.successCallback = success;
+    self.failureCallback = failure;
     [self start];
 }
 
@@ -115,6 +120,10 @@
         [request cancel];
     }
     [[DZBatchRequestManager sharedManager] removeBatchRequest:self];
+}
+
+- (void)dealloc {
+    DZLog(@"%@ dealloc", [self class]);
 }
 
 @end
