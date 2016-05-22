@@ -7,30 +7,27 @@
 //
 
 #import <Foundation/Foundation.h>
-@class DZBaseRequest, DZBatchRequest;
-
-typedef NS_ENUM(NSUInteger, DZBatchRequestState) {
-    DZBatchRequestStateIdle, ///< The default state when create batch request.
-    DZBatchRequestStateRunning, ///< The batch request is currently running.
-    DZBatchRequestStateCompleted, ///< The batch request has completed the task.
-    DZBatchRequestStateCanceling, ///< The batch request has been told to cancel.
-};
+#import "DZBaseRequest.h"
+@class DZBatchRequest;
 
 typedef void(^DZBatchRequestSuccessCallback)(DZBatchRequest *batchRequest);
 typedef void(^DZBatchRequestFailureCallback)(DZBatchRequest *batchRequest, __kindof DZBaseRequest *request, NSError *error);
 
 @interface DZBatchRequest : NSObject
 
-/// The requests ran in the receiver.
+/**
+ The requests ran in the receiver.
+ */
 @property (nonatomic, strong, readonly) NSArray *requests;
 
 /**
- *  When receiver has been told to cancel, the error will be `NSURLErrorCancelled` for the `code`.
+ The current state of the batch request.
  */
+@property (nonatomic, assign, readonly) DZRequestState state;
 
-/// The current state of the receiver.
-@property (nonatomic, assign, readonly) DZBatchRequestState state;
-
+/**
+ A flag to indicate whether cancel the rest request when error occurs.
+ */
 @property (nonatomic, assign) BOOL cancelWhenErrorOccur;
 
 @property (nonatomic, copy) DZBatchRequestSuccessCallback successCallback;

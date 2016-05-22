@@ -6,9 +6,9 @@
 //  Copyright © 2016 DaZuo. All rights reserved.
 //
 
-#import "DZBaseRequest.h"
+#import "DZAppBaseRequest.h"
 
-@interface DZChangeAvatarRequest : DZBaseRequest
+@interface DZChangeAvatarRequest : DZAppBaseRequest
 
 @property (nonatomic, strong) UIImage *avatar;
 

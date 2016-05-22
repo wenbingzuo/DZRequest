@@ -27,6 +27,13 @@ typedef NS_ENUM(NSUInteger, DZResponseSerializerType) {
     DZResponseSerializerTypeJSON
 };
 
+typedef NS_ENUM(NSUInteger, DZRequestState) {
+    DZRequestStateIdle = 0,
+    DZRequestStateRunning,
+    DZRequestStateCompleted,
+    DZRequestStateCanceling,
+};
+
 @protocol DZRequestAccessory <NSObject>
 
 @optional
@@ -61,6 +68,11 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
  The data task from `NSURLSession`.
 */
 @property (nonatomic, strong) NSURLSessionDataTask *task;
+
+/**
+ The current state of the request.
+ */
+@property (nonatomic, assign, readonly) DZRequestState state;
 
 @property (nonatomic, strong, readonly) NSMutableArray *accessories;
 - (void)addAccessory:(id<DZRequestAccessory>)accessory;

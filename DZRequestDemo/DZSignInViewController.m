@@ -49,7 +49,7 @@
         success = NO;
         dispatch_semaphore_signal(semaphore);
     }];
-    
+    [self.signInRequest cancel];
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     
     return success;

@@ -7,15 +7,8 @@
 //
 
 #import "DZChangeAvatarRequest.h"
-#import "NSMutableDictionary+DZRequest.h"
 
 @implementation DZChangeAvatarRequest
-
-- (NSDictionary *)requestDefaultHeader {
-    NSMutableDictionary *header = [NSMutableDictionary dictionary];
-    [header dz_setNilableValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"]  forKey:@"Authorization"];
-    return header;
-}
 
 - (DZRequestMethod)requestMethod {
     return DZRequestMethodPOST;

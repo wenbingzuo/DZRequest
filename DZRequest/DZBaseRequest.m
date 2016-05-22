@@ -13,6 +13,7 @@
 
 @interface DZBaseRequest ()
 @property (nonatomic, strong, readwrite) NSMutableArray *accessories;
+@property (nonatomic, assign, readwrite) DZRequestState state;
 @end
 
 @implementation DZBaseRequest
@@ -24,6 +25,7 @@
         self.requestTimeoutInterval = 20;
         self.requestSerializerType = DZRequestSerializerTypeJSON;
         self.responseSerializerType = DZResponseSerializerTypeJSON;
+        self.state = DZRequestStateIdle;
     }
     return self;
 }
@@ -40,6 +42,9 @@
 }
 
 - (void)start {
+    if (self.state == DZRequestStateRunning) return;
+    self.state = DZRequestStateRunning;
+    
     [self toggleAccessoriesRequestWillStart];
     [[DZRequestManager sharedManager] addRequest:self];
 }
@@ -55,6 +60,8 @@
 }
 
 - (void)cancel {
+    if (self.state == DZRequestStateCanceling) return;
+    self.state = DZRequestStateCanceling;
     [[DZRequestManager sharedManager] removeRequest:self];
 }
 
@@ -201,6 +208,9 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
     request.responseObject = responseObject;
     request.error = error;
     
+    if (error.code != NSURLErrorCancelled) {
+        request.state = DZRequestStateCompleted;
+    }
     [request toggleAccessoriesRequestWillStop];
     if (!error) {
         [request requestDidFinishSuccess];

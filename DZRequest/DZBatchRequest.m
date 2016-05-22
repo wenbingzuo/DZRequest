@@ -7,13 +7,12 @@
 //
 
 #import "DZBatchRequest.h"
-#import "DZBaseRequest.h"
 #import "DZRequestConst.h"
 
 @interface DZBatchRequest ()
 
 @property (nonatomic, strong, readwrite) NSArray *requests;
-@property (nonatomic, assign, readwrite) DZBatchRequestState state;
+@property (nonatomic, assign, readwrite) DZRequestState state;
 
 @end
 
@@ -23,7 +22,7 @@
     self = [super init];
     if (self) {
         self.completionQueue = dispatch_get_main_queue();
-        self.state = DZBatchRequestStateIdle;
+        self.state = DZRequestStateIdle;
         self.cancelWhenErrorOccur = YES;
         
         NSMutableArray *array = [NSMutableArray array];
@@ -40,10 +39,8 @@
 }
 
 - (void)start {
-    
-    if (self.state == DZBatchRequestStateRunning) return;
-    
-    self.state = DZBatchRequestStateRunning;
+    if (self.state == DZRequestStateRunning) return;
+    self.state = DZRequestStateRunning;
     [[DZBatchRequestManager sharedManager] addBatchRequest:self];
     
     dispatch_group_t group = dispatch_group_create();
@@ -57,11 +54,13 @@
         dispatch_group_async(group, queue, ^{
             @weakify(self)
             [request startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
-                dispatch_group_leave(group);
-                
                 @strongify(self)
+                
                 if (self.cancelWhenErrorOccur && flag) {
-                    if (!request.responseFilterCallback) return;
+                    if (!request.responseFilterCallback) {
+                        dispatch_group_leave(group);
+                        return;
+                    }
                     
                     NSError *error = request.responseFilterCallback(request);
                     if (!error) return;
@@ -72,15 +71,18 @@
                     for (DZBaseRequest *request in self.requests) {
                         [request cancel];
                     }
+                    dispatch_group_leave(group);
+                } else {
+                    dispatch_group_leave(group);
                 }
             } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
+                @strongify(self)
+                
                 if (error.code != NSURLErrorCancelled) {
                     lastRequest = request;
                     lastError = error;
                 }
-                dispatch_group_leave(group);
                 
-                @strongify(self)
                 if (self.cancelWhenErrorOccur && flag) {
                     flag = NO;
                     for (DZBaseRequest *request in self.requests) {
@@ -88,12 +90,13 @@
                     }
                 }
                 
+                dispatch_group_leave(group);
             }];
         });
     }
     
     dispatch_group_notify(group, self.completionQueue?self.completionQueue:dispatch_get_main_queue(), ^{
-        self.state = DZBatchRequestStateCompleted;
+        self.state = DZRequestStateCompleted;
         
         if (lastError) {
             !self.failureCallback?:self.failureCallback(self, lastRequest, lastError);
@@ -119,7 +122,8 @@
 }
 
 - (void)cancel {
-    self.state = DZBatchRequestStateCanceling;
+    if (self.state == DZRequestStateCanceling) return;
+    self.state = DZRequestStateCanceling;
     
     for (DZBaseRequest *request in self.requests) {
         [request cancel];
