@@ -27,6 +27,29 @@ typedef NS_ENUM(NSUInteger, DZResponseSerializerType) {
     DZResponseSerializerTypeJSON
 };
 
+@protocol DZRequestAccessory <NSObject>
+
+@optional
+
+/**
+ This method will be called immediately when invoking `-start` method.
+ */
+- (void)requestWillStart:(id)request;
+/**
+ This method will be called immediately when resume the `task`.
+ */
+- (void)requestDidStart:(id)request;
+/**
+ This method will be called before `successCallback` or `failureCallback` is invoked.
+ */
+- (void)requestWillStop:(id)request;
+/**
+ This method will be called after `successCallback` or `failureCallback` is invoked.
+ */
+- (void)requestDidStop:(id)request;
+
+@end
+
 typedef void(^DZRequestSuccessCallback)(__kindof DZBaseRequest *request, id responseObject);
 typedef void(^DZRequestFailureCallback)(__kindof DZBaseRequest *request, NSError *error);
 typedef void(^DZRequestConstructionCallback)(id<AFMultipartFormData> formData);
@@ -34,11 +57,13 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 
 @interface DZBaseRequest : NSObject
 
-/// The data task from `NSURLSession`.
+/**
+ The data task from `NSURLSession`.
+*/
 @property (nonatomic, strong) NSURLSessionDataTask *task;
 
-/// 
-@property (nonatomic, assign) BOOL showActivityIndicator;
+@property (nonatomic, strong, readonly) NSMutableArray *accessories;
+- (void)addAccessory:(id<DZRequestAccessory>)accessory;
 
 ///----------------------------
 /// @name Request Configuration
@@ -53,6 +78,7 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 @property (nonatomic, strong) id requestParameters;
 @property (nonatomic, copy) DZRequestConstructionCallback requestConstructionCallback;
 @property (nonatomic, assign) DZRequestSerializerType requestSerializerType;
+@property (nonatomic, assign) BOOL showActivityIndicator;
 
 ///---------------
 /// @name Response
@@ -69,21 +95,28 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 
 @property (nonatomic, copy) DZRequestSuccessCallback successCallback;
 @property (nonatomic, copy) DZRequestFailureCallback failureCallback;
+- (void)setSuccessCallback:(DZRequestSuccessCallback)success failure:(DZRequestFailureCallback)failure;
+
 @property (nonatomic, copy) DZRequestUploadProgressCallback uploadProgressCallback;
 
 - (void)start;
 - (void)startRequestSuccessCallback:(DZRequestSuccessCallback)success failureCallback:(DZRequestFailureCallback)failure;
 
-- (void)setSuccessCallback:(DZRequestSuccessCallback)success failure:(DZRequestFailureCallback)failure;
+/**
+ When invoked, the `failureCallback` will receive an error value of { NSURLErrorDomain, NSURLErrorCancelled }. But if the request has already finished the task, that make no sense.
+ */
 - (void)cancel;
+
+- (void)requestDidFinishSuccess;
+- (void)requestDidFinishFailure;
 
 @end
 
 @interface DZBaseRequest (DZRequestAdd)
 
 /**
- *  Not used by default. This is a convenient property to construct your own request.
- *  @see `DZChainRequest.m` and `DZBatchRequest.m`
+ Not used by default. This is a convenient property to construct your own request.
+ @see `DZChainRequest.m` and `DZBatchRequest.m`
  */
 @property (nonatomic, copy) NSError * (^responseFilterCallback)(DZBaseRequest *request);
 
@@ -98,7 +131,7 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 ///---------------------
 
 /**
- *  Creates and returns the shared `DZRequestManager` object.
+ Creates and returns the shared `DZRequestManager` object.
  */
 + (instancetype)sharedManager;
 
@@ -107,16 +140,16 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 ///------------------------
 
 /**
- *  Add and start the request.
- *
- *  @param request The request to operate.
+ Add and start the request.
+ 
+ @param request The request to operate.
  */
 - (void)addRequest:(DZBaseRequest *)request;
 
 /**
- *  Cancel and remove the request.
- *
- *  @param request The request to cancel.
+ Cancel and remove the request.
+ 
+ @param request The request to cancel.
  */
 - (void)removeRequest:(DZBaseRequest *)request;
 

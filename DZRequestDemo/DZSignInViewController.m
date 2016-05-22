@@ -43,7 +43,7 @@
     __block BOOL success = NO;
     [self.signInRequest startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
         success = YES;
-        [[NSUserDefaults standardUserDefaults] setObject:responseObject[@"user"][@"access_token"] forKey:@"accessToken"];
+//        [[NSUserDefaults standardUserDefaults] setObject:responseObject[@"user"][@"access_token"] forKey:@"accessToken"];
         dispatch_semaphore_signal(semaphore);
     } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
         success = NO;

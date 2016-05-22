@@ -113,6 +113,11 @@
     [self start];
 }
 
+- (void)setSuccesssCallback:(DZBatchRequestSuccessCallback)success failureCallback:(DZBatchRequestFailureCallback)failure {
+    self.successCallback = success;
+    self.failureCallback = failure;
+}
+
 - (void)cancel {
     self.state = DZBatchRequestStateCanceling;
     
@@ -120,10 +125,6 @@
         [request cancel];
     }
     [[DZBatchRequestManager sharedManager] removeBatchRequest:self];
-}
-
-- (void)dealloc {
-    DZLog(@"%@ dealloc", [self class]);
 }
 
 @end

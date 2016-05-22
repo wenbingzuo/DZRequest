@@ -32,8 +32,6 @@
 }
 - (IBAction)sendBatchRequest:(id)sender {
     DZSignInRequest *signInRequest = [DZSignInRequest new];
-    signInRequest.username = @"1771028082";
-    signInRequest.password = @"Yala1990v587";
     @weakify(self)
     signInRequest.responseFilterCallback = ^NSError *(DZBaseRequest *request) {
         if ([request.responseObject[@"success"] boolValue]) {

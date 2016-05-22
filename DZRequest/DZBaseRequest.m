@@ -11,6 +11,10 @@
 #import <objc/runtime.h>
 #import <AFNetworkActivityIndicatorManager.h>
 
+@interface DZBaseRequest ()
+@property (nonatomic, strong, readwrite) NSMutableArray *accessories;
+@end
+
 @implementation DZBaseRequest
 
 - (instancetype)init {
@@ -24,7 +28,19 @@
     return self;
 }
 
+- (NSMutableArray *)accessories {
+    if (!_accessories) {
+        _accessories = [NSMutableArray array];
+    }
+    return _accessories;
+}
+
+- (void)addAccessory:(id<DZRequestAccessory>)accessory {
+    [self.accessories addObject:accessory];
+}
+
 - (void)start {
+    [self toggleAccessoriesRequestWillStart];
     [[DZRequestManager sharedManager] addRequest:self];
 }
 
@@ -46,10 +62,46 @@
     return [(NSHTTPURLResponse *)self.task.response statusCode];
 }
 
-- (void)dealloc {
-    DZLog(@"---------");
-    DZLog(@"%@ dealloc", [self class]);
-    DZLog(@"---------");
+- (void)requestDidFinishSuccess {
+    
+}
+
+- (void)requestDidFinishFailure {
+    
+}
+
+#pragma mark - Private
+
+- (void)toggleAccessoriesRequestWillStart {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestWillStart:)]) {
+            [obj requestWillStart:self];
+        }
+    }];
+}
+
+- (void)toggleAccessoriesRequestDidStart {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestDidStart:)]) {
+            [obj requestDidStart:self];
+        }
+    }];
+}
+
+- (void)toggleAccessoriesRequestWillStop {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestWillStop:)]) {
+            [obj requestWillStop:self];
+        }
+    }];
+}
+
+- (void)toggleAccessoriesRequestDidStop {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestDidStop:)]) {
+            [obj requestDidStop:self];
+        }
+    }];
 }
 
 @end
@@ -149,15 +201,19 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
     request.responseObject = responseObject;
     request.error = error;
     
+    [request toggleAccessoriesRequestWillStop];
     if (!error) {
+        [request requestDidFinishSuccess];
         if (request.successCallback) {
-            request.successCallback(request, responseObject);
+            request.successCallback(request, request.responseObject);
         }
     } else {
+        [request requestDidFinishFailure];
         if (request.failureCallback) {
-            request.failureCallback(request, error);
+            request.failureCallback(request, request.error);
         }
     }
+    [request toggleAccessoriesRequestDidStop];
     
     [self _removeTask:request];
 }
@@ -259,6 +315,7 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
     [AFNetworkActivityIndicatorManager sharedManager].enabled = request.showActivityIndicator;
     request.task = task;
     [self _addTask:request];
+    [request toggleAccessoriesRequestDidStart];
 }
 
 - (void)removeRequest:(DZBaseRequest *)request {

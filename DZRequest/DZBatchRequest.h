@@ -10,10 +10,10 @@
 @class DZBaseRequest, DZBatchRequest;
 
 typedef NS_ENUM(NSUInteger, DZBatchRequestState) {
-    DZBatchRequestStateIdle, ///< The default state when create receiver.
-    DZBatchRequestStateRunning, ///< The receiver is currently running.
-    DZBatchRequestStateCompleted, ///< The receiver has completed the task.
-    DZBatchRequestStateCanceling, ///< The receiver has been told to cancel.
+    DZBatchRequestStateIdle, ///< The default state when create batch request.
+    DZBatchRequestStateRunning, ///< The batch request is currently running.
+    DZBatchRequestStateCompleted, ///< The batch request has completed the task.
+    DZBatchRequestStateCanceling, ///< The batch request has been told to cancel.
 };
 
 typedef void(^DZBatchRequestSuccessCallback)(DZBatchRequest *batchRequest);
@@ -35,34 +35,21 @@ typedef void(^DZBatchRequestFailureCallback)(DZBatchRequest *batchRequest, __kin
 
 @property (nonatomic, copy) DZBatchRequestSuccessCallback successCallback;
 @property (nonatomic, copy) DZBatchRequestFailureCallback failureCallback;
+- (void)setSuccesssCallback:(DZBatchRequestSuccessCallback)success failureCallback:(DZBatchRequestFailureCallback)failure;
+
 
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
 
 - (void)start;
 
-/**
- *  开始请求，会覆盖前面设置的回调.
- *
- *  @param success 成功回调.
- *  @param failure 失败回调.
- */
-//- (void)startBatchRequestWithSuccessCallback:(DZBatchRequestCompletionCallback)success failureCallback:(DZBatchRequestCompletionCallback)failure;
 - (void)startBatchReqeustSuccessCallback:(DZBatchRequestSuccessCallback)success failureCallback:(DZBatchRequestFailureCallback)failure;
 
-/// 取消当前的请求.
 - (void)cancel;
 
-#pragma mark - Initialization
 ///---------------------
 /// @name Initialization
 ///---------------------
 
-/**
- *  Initializes a `DZBatchRequest` object with the specified requests.
- *
- *  @param requests The requests for the receiver. If same requests contained in this array,
- *                  the later will be ignored.
- */
 - (instancetype)initWithRequests:(NSArray<DZBaseRequest *>*) requests;
 
 @end

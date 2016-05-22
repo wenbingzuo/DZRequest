@@ -11,6 +11,14 @@
 
 @implementation DZSignInRequest
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [self addAccessory:self];
+    }
+    return self;
+}
+
 - (DZRequestMethod)requestMethod {
     return DZRequestMethodPOST;
 }
@@ -28,6 +36,28 @@
     [params dz_setNilableValue:self.username forKey:@"username"];
     [params dz_setNilableValue:self.password forKey:@"password"];
     return params;
+}
+
+//- (void)requestWillStart:(id)request {
+//    NSLog(@"%@ will start --> %@", [request class], [NSThread currentThread]);
+//}
+//
+//- (void)requestDidStart:(id)request {
+//    NSLog(@"%@ did start --> %@", [request class], [NSThread currentThread]);
+//}
+//
+//- (void)requestWillStop:(id)request {
+//    if (!self.error) {
+//        [[NSUserDefaults standardUserDefaults] setObject:self.responseObject[@"user"][@"access_token"] forKey:@"accessToken"];
+//    }
+//}
+//
+//- (void)requestDidStop:(id)request {
+//    NSLog(@"%@ did stop --> %@", [request class], [NSThread currentThread]);
+//}
+
+- (void)requestDidFinishSuccess {
+    [[NSUserDefaults standardUserDefaults] setObject:self.responseObject[@"user"][@"access_token"] forKey:@"accessToken"];
 }
 
 @end

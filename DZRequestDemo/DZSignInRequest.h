@@ -8,7 +8,7 @@
 
 #import "DZBaseRequest.h"
 
-@interface DZSignInRequest : DZBaseRequest
+@interface DZSignInRequest : DZBaseRequest <DZRequestAccessory>
 
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *password;
