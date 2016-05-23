@@ -67,7 +67,7 @@
         dispatch_group_enter(group);
         dispatch_group_async(group, queue, ^{
             @weakify(self)
-            [request cancelWithCallback:^(__kindof DZBaseRequest *request) {
+            [request setCancelCallback:^(__kindof DZBaseRequest *request) {
                 dispatch_group_leave(group);
             }];
             
@@ -112,16 +112,24 @@
     }
     
     dispatch_group_notify(group, self.completionQueue?self.completionQueue:dispatch_get_main_queue(), ^{
-        self.running = NO;
-        self.canceling = NO;
         
-        [self toggleAccessoriesRequestWillStop];
-        if (lastError) {
-            !self.failureCallback?:self.failureCallback(self, lastRequest, lastError);
+        if (self.canceling) {
+            self.running = NO;
+            !self.cancelCallback?:self.cancelCallback(self);
+            self.canceling = NO;
         } else {
-            !self.successCallback?:self.successCallback(self);
+            self.running = NO;
+            self.canceling = NO;
+            
+            [self toggleAccessoriesRequestWillStop];
+            if (lastError) {
+                !self.failureCallback?:self.failureCallback(self, lastRequest, lastError);
+            } else {
+                !self.successCallback?:self.successCallback(self);
+            }
+            [self toggleAccessoriesRequestDidStop];
         }
-        [self toggleAccessoriesRequestDidStop];
+        
         lastError = nil;
         lastRequest = nil;
         
@@ -148,6 +156,11 @@
         [request cancel];
     }
     [[DZBatchRequestManager sharedManager] removeBatchRequest:self];
+}
+
+- (void)cancelWithCallback:(DZBatchRequestCancelCallback)cancel {
+    self.cancelCallback = cancel;
+    [self cancel];
 }
 
 #pragma mark - Private

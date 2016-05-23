@@ -15,6 +15,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *hintLabel;
 
+@property (nonatomic, strong) DZBatchRequest *batchRequest;
+
 @end
 
 @implementation DZBatchRequestViewController
@@ -29,14 +31,18 @@
     DZGetTeamFeedsRequest *teamFeedsRequest = [DZGetTeamFeedsRequest new];
     DZGetUserFeedsRequest *userFeedsRequest = [DZGetUserFeedsRequest new];
     
-    DZBatchRequest *batchRequest = [[DZBatchRequest alloc] initWithRequests:@[teamFeedsRequest, userFeedsRequest]];
-    [batchRequest startBatchReqeustSuccessCallback:^(DZBatchRequest *batchRequest) {
+    self.batchRequest = [[DZBatchRequest alloc] initWithRequests:@[teamFeedsRequest, userFeedsRequest]];
+    [self.batchRequest startBatchReqeustSuccessCallback:^(DZBatchRequest *batchRequest) {
         NSLog(@"success %@", batchRequest.requests);
         
     } failureCallback:^(DZBatchRequest *batchRequest, __kindof DZBaseRequest *request, NSError *error) {
         NSLog(@"failure %@ --> %@ --> %@", batchRequest.requests, request, error.localizedDescription);
         
     }];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.batchRequest cancel];
 }
 
 @end

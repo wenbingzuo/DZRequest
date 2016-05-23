@@ -209,25 +209,34 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
 }
 
 - (void)_handleResponse:(NSURLSessionDataTask *)task response:(id)responseObject error:(NSError *)error {
-    NSString *key = DZHashStringFromTask(task);;
-    DZBaseRequest *request = self.requests[key];
-    request.responseObject = responseObject;
-    request.error = error;
-    request.running = NO;
+    NSString *key = DZHashStringFromTask(task);
     
-    [request toggleAccessoriesRequestWillStop];
-    if (!error) {
-        [request requestDidFinishSuccess];
-        if (request.successCallback) {
-            request.successCallback(request, request.responseObject);
-        }
+    DZBaseRequest *request = self.requests[key];
+    if (error.code == NSURLErrorCancelled) {
+        request.running = NO;
+        !request.cancelCallback?:request.cancelCallback(request);
+        request.canceling = NO;
     } else {
-        [request requestDidFinishFailure];
-        if (request.failureCallback) {
-            request.failureCallback(request, request.error);
+        request.responseObject = responseObject;
+        request.error = error;
+        request.running = NO;
+        request.canceling = NO;
+        
+        [request toggleAccessoriesRequestWillStop];
+        if (!error) {
+            [request requestDidFinishSuccess];
+            if (request.successCallback) {
+                request.successCallback(request, request.responseObject);
+            }
+        } else {
+            [request requestDidFinishFailure];
+            if (request.failureCallback) {
+                request.failureCallback(request, request.error);
+            }
         }
+        [request toggleAccessoriesRequestDidStop];
     }
-    [request toggleAccessoriesRequestDidStop];
+    
     
     [self _removeTask:request];
 }
@@ -334,10 +343,6 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
 
 - (void)removeRequest:(DZBaseRequest *)request {
     [request.task cancel];
-    [self _removeTask:request];
-    request.running = NO;
-    request.canceling = NO;
-    !request.cancelCallback?:request.cancelCallback(request);
 }
 
 @end

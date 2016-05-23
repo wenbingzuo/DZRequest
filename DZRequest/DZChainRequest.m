@@ -49,6 +49,8 @@
     if (self.isRunning) return;
     self.running = YES;
     [[DZChainRequestManager sharedManager] addChainRequest:self];
+    [self toggleAccessoriesRequestWillStart];
+    [self toggleAccessoriesRequestDidStart];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         __block NSError *lastError = nil;
@@ -58,6 +60,9 @@
         [self.requests enumerateObjectsUsingBlock:^(DZBaseRequest * _Nonnull request, NSUInteger idx, BOOL * _Nonnull stop) {
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             
+            [request setCancelCallback:^(__kindof DZBaseRequest *request) {
+                dispatch_semaphore_signal(semaphore);
+            }];
             [request startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
                 lastError = nil;
                 lastResponseObject = responseObject;
@@ -86,14 +91,24 @@
         }];
         
         dispatch_async(self.completionQueue?self.completionQueue:dispatch_get_main_queue(), ^{
-            self.running = NO;
-            self.canceling = NO;
             
-            if (lastError) {
-                !self.failureCallback?:self.failureCallback(self, lastRequest, lastError);
+            if (self.isCanceling) {
+                self.running = NO;
+                !self.cancelCallback?:self.cancelCallback(self);
+                self.canceling = NO;
             } else {
-                !self.successCallback?:self.successCallback(self, lastRequest, lastResponseObject);
+                self.running = NO;
+                self.canceling = NO;
+                
+                [self toggleAccessoriesRequestWillStop];
+                if (lastError) {
+                    !self.failureCallback?:self.failureCallback(self, lastRequest, lastError);
+                } else {
+                    !self.successCallback?:self.successCallback(self, lastRequest, lastResponseObject);
+                }
+                [self toggleAccessoriesRequestDidStop];
             }
+            
             lastRequest = nil;
             lastError = nil;
             lastResponseObject = nil;
@@ -116,6 +131,11 @@
         [request cancel];
     }];
     [[DZChainRequestManager sharedManager] removeChainRequest:self];
+}
+
+- (void)cancelWithCallback:(DZChainRequestCancelCallback)cancel {
+    self.cancelCallback = cancel;
+    [self cancel];
 }
 
 #pragma mark - Private

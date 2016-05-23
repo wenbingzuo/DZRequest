@@ -16,6 +16,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *hintLabel;
 
+@property (nonatomic, strong) DZChainRequest *chainRequest;
+
 @end
 
 @implementation DZChainRequestViewController
@@ -27,18 +29,22 @@
 
 - (IBAction)sendChainRequest:(id)sender {
     DZSignInRequest *signInRequest = [DZSignInRequest new];
-    signInRequest.username = @"17710280827";
-    signInRequest.password = @"Yala1990v587";
+    signInRequest.username = @"username";
+    signInRequest.password = @"password";
     
     DZChangeAvatarRequest *changeAvatarRequest = [DZChangeAvatarRequest new];
     changeAvatarRequest.avatar = [UIImage imageNamed:@"avatar.jpg"];
     
-    DZChainRequest *chainRequest = [[DZChainRequest alloc] initWithRequests:@[signInRequest, changeAvatarRequest]];
-    [chainRequest startChainRequestSuccessCallback:^(DZChainRequest *chainRequest, __kindof DZBaseRequest *request, id responseObject) {
+    self.chainRequest = [[DZChainRequest alloc] initWithRequests:@[signInRequest, changeAvatarRequest]];
+    [self.chainRequest startChainRequestSuccessCallback:^(DZChainRequest *chainRequest, __kindof DZBaseRequest *request, id responseObject) {
         DZLog(@"success %@\n%@\n%@", chainRequest.requests, request, responseObject);
     } failureCallback:^(DZChainRequest *chainRequest, __kindof DZBaseRequest *request, NSError *error) {
         DZLog(@"failure %@\n%@\n%@", chainRequest.requests, request, error.localizedDescription);
     }];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.chainRequest cancel];
 }
 
 @end

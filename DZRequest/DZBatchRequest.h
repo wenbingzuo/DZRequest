@@ -12,6 +12,7 @@
 
 typedef void(^DZBatchRequestSuccessCallback)(DZBatchRequest *batchRequest);
 typedef void(^DZBatchRequestFailureCallback)(DZBatchRequest *batchRequest, __kindof DZBaseRequest *request, NSError *error);
+typedef void(^DZBatchRequestCancelCallback)(DZBatchRequest *batchRequest);
 
 @interface DZBatchRequest : NSObject
 
@@ -40,7 +41,9 @@ typedef void(^DZBatchRequestFailureCallback)(DZBatchRequest *batchRequest, __kin
 
 - (void)startBatchReqeustSuccessCallback:(DZBatchRequestSuccessCallback)success failureCallback:(DZBatchRequestFailureCallback)failure;
 
+@property (nonatomic, copy) DZBatchRequestCancelCallback cancelCallback;
 - (void)cancel;
+- (void)cancelWithCallback:(DZBatchRequestCancelCallback)cancel;
 
 ///---------------------
 /// @name Initialization

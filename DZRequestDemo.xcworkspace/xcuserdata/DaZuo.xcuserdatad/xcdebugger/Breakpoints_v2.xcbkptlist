@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DZRequestDemo/DZSignInViewController.m"
-            timestampString = "485683820.211018"
+            filePath = "DZRequest/DZChainRequest.m"
+            timestampString = "485687876.20717"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "-shouldPerformSegueWithIdentifier:sender:"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "-start"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -12,6 +12,7 @@
 
 typedef void(^DZChainRequestSuccessCallback)(DZChainRequest *chainRequest, __kindof DZBaseRequest *request, id responseObject);
 typedef void(^DZChainRequestFailureCallback)(DZChainRequest *chainRequest, __kindof DZBaseRequest *request, NSError *error);
+typedef void(^DZChainRequestCancelCallback)(DZChainRequest *chainRequest);
 
 @interface DZChainRequest : NSObject
 
@@ -30,9 +31,9 @@ typedef void(^DZChainRequestFailureCallback)(DZChainRequest *chainRequest, __kin
 - (void)start;
 - (void)startChainRequestSuccessCallback:(DZChainRequestSuccessCallback)success failureCallback:(DZChainRequestFailureCallback)failure;
 
-
+@property (nonatomic, copy) DZChainRequestCancelCallback cancelCallback;
 - (void)cancel;
-
+- (void)cancelWithCallback:(DZChainRequestCancelCallback)cancel;
 
 @end
 
