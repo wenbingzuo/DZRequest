@@ -37,7 +37,6 @@
         NSLog(@"failure %@ --> %@ --> %@", batchRequest.requests, request, error.localizedDescription);
         
     }];
-    [batchRequest cancel];
 }
 
 @end

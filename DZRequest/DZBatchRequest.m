@@ -13,10 +13,22 @@
 
 @property (nonatomic, strong, readwrite) NSArray *requests;
 @property (nonatomic, assign, readwrite) DZRequestState state;
+@property (nonatomic, strong, readwrite) NSMutableArray *accessories;
 
 @end
 
 @implementation DZBatchRequest
+
+- (NSMutableArray *)accessories {
+    if (!_accessories) {
+        _accessories = [NSMutableArray array];
+    }
+    return _accessories;
+}
+
+- (void)addAccessory:(id<DZRequestAccessory>)accessory {
+    [self.accessories addObject:accessory];
+}
 
 - (instancetype)initWithRequests:(NSArray<DZBaseRequest *> *)requests {
     self = [super init];
@@ -41,6 +53,7 @@
 - (void)start {
     if (self.state == DZRequestStateRunning) return;
     self.state = DZRequestStateRunning;
+    [self toggleAccessoriesRequestWillStart];
     [[DZBatchRequestManager sharedManager] addBatchRequest:self];
     
     dispatch_group_t group = dispatch_group_create();
@@ -49,6 +62,7 @@
     __block DZBaseRequest *lastRequest = nil;
     __block NSError *lastError = nil;
     __block BOOL flag = YES;
+    [self toggleAccessoriesRequestDidStart];
     for (DZBaseRequest *request in self.requests) {
         dispatch_group_enter(group);
         dispatch_group_async(group, queue, ^{
@@ -78,7 +92,7 @@
             } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
                 @strongify(self)
                 
-                if (error.code != NSURLErrorCancelled) {
+                if (error.code != NSURLErrorCancelled || self.state == DZRequestStateCanceling) {
                     lastRequest = request;
                     lastError = error;
                 }
@@ -96,13 +110,17 @@
     }
     
     dispatch_group_notify(group, self.completionQueue?self.completionQueue:dispatch_get_main_queue(), ^{
-        self.state = DZRequestStateCompleted;
+        if (lastError.code != NSURLErrorCancelled) {
+            self.state = DZRequestStateCompleted;
+        }
         
+        [self toggleAccessoriesRequestWillStop];
         if (lastError) {
             !self.failureCallback?:self.failureCallback(self, lastRequest, lastError);
         } else {
             !self.successCallback?:self.successCallback(self);
         }
+        [self toggleAccessoriesRequestDidStop];
         lastError = nil;
         lastRequest = nil;
         
@@ -129,6 +147,40 @@
         [request cancel];
     }
     [[DZBatchRequestManager sharedManager] removeBatchRequest:self];
+}
+
+#pragma mark - Private
+
+- (void)toggleAccessoriesRequestWillStart {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestWillStart:)]) {
+            [obj requestWillStart:self];
+        }
+    }];
+}
+
+- (void)toggleAccessoriesRequestDidStart {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestDidStart:)]) {
+            [obj requestDidStart:self];
+        }
+    }];
+}
+
+- (void)toggleAccessoriesRequestWillStop {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestWillStop:)]) {
+            [obj requestWillStop:self];
+        }
+    }];
+}
+
+- (void)toggleAccessoriesRequestDidStop {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestDidStop:)]) {
+            [obj requestDidStop:self];
+        }
+    }];
 }
 
 @end

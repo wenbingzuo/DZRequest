@@ -7,14 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-@class DZChainRequest, DZBaseRequest;
-
-typedef NS_ENUM(NSUInteger, DZChainRequestState) {
-    DZChainRequestStateIdle,
-    DZChainRequestStateRunning,
-    DZChainRequestStateCompleted,
-    DZChainRequestStateCanceling,
-};
+#import "DZBaseRequest.h"
+@class DZChainRequest;
 
 typedef void(^DZChainRequestSuccessCallback)(DZChainRequest *chainRequest, __kindof DZBaseRequest *request, id responseObject);
 typedef void(^DZChainRequestFailureCallback)(DZChainRequest *chainRequest, __kindof DZBaseRequest *request, NSError *error);
@@ -22,13 +16,15 @@ typedef void(^DZChainRequestFailureCallback)(DZChainRequest *chainRequest, __kin
 @interface DZChainRequest : NSObject
 
 @property (nonatomic, strong, readonly) NSArray *requests;
-@property (nonatomic, assign, readonly) DZChainRequestState state;
+@property (nonatomic, assign, readonly) DZRequestState state;
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
+
+@property (nonatomic, strong, readonly) NSMutableArray *accessories;
+- (void)addAccessory:(id<DZRequestAccessory>)accessory;
 
 @property (nonatomic, copy) DZChainRequestSuccessCallback successCallback;
 @property (nonatomic, copy) DZChainRequestFailureCallback failureCallback;
 - (void)setSuccessCallback:(DZChainRequestSuccessCallback)success failureCallback:(DZChainRequestFailureCallback)failure;
-
 
 - (instancetype)initWithRequests:(NSArray<DZBaseRequest *>*) requests;
 

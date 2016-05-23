@@ -7,13 +7,13 @@
 //
 
 #import "DZChainRequest.h"
-#import "DZBaseRequest.h"
 #import "DZRequestConst.h"
 
 @interface DZChainRequest ()
 
 @property (nonatomic, strong, readwrite) NSArray *requests;
-@property (nonatomic, assign, readwrite) DZChainRequestState state;
+@property (nonatomic, assign, readwrite) DZRequestState state;
+@property (nonatomic, strong, readwrite) NSMutableArray *accessories;
 
 @end
 
@@ -23,10 +23,21 @@
     self = [super init];
     if (self) {
         self.requests = requests;
-        self.state = DZChainRequestStateIdle;
+        self.state = DZRequestStateIdle;
         self.completionQueue = dispatch_get_main_queue();
     }
     return self;
+}
+
+- (NSMutableArray *)accessories {
+    if (!_accessories) {
+        _accessories = [NSMutableArray array];
+    }
+    return _accessories;
+}
+
+- (void)addAccessory:(id<DZRequestAccessory>)accessory {
+    [self.accessories addObject:accessory];
 }
 
 - (void)setSuccessCallback:(DZChainRequestSuccessCallback)success failureCallback:(DZChainRequestFailureCallback)failure {
@@ -35,8 +46,8 @@
 }
 
 - (void)start {
-    if (self.state == DZChainRequestStateRunning) return;
-    self.state = DZChainRequestStateRunning;
+    if (self.state == DZRequestStateRunning) return;
+    self.state = DZRequestStateRunning;
     [[DZChainRequestManager sharedManager] addChainRequest:self];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -75,7 +86,9 @@
         }];
         
         dispatch_async(self.completionQueue?self.completionQueue:dispatch_get_main_queue(), ^{
-            self.state = DZChainRequestStateCompleted;
+            if (lastError.code != NSURLErrorCancelled) {
+                self.state = DZRequestStateCompleted;
+            }
             if (lastError) {
                 !self.failureCallback?:self.failureCallback(self, lastRequest, lastError);
             } else {
@@ -96,15 +109,47 @@
 }
 
 - (void)cancel {
-    self.state = DZChainRequestStateCanceling;
+    if (self.state == DZRequestStateCanceling) return;
+    self.state = DZRequestStateCanceling;
+    
     [self.requests enumerateObjectsUsingBlock:^(DZBaseRequest * _Nonnull request, NSUInteger idx, BOOL * _Nonnull stop) {
         [request cancel];
     }];
     [[DZChainRequestManager sharedManager] removeChainRequest:self];
 }
 
-- (void)dealloc {
-    DZLog(@"%@ dealloc", [self class]);
+#pragma mark - Private
+
+- (void)toggleAccessoriesRequestWillStart {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestWillStart:)]) {
+            [obj requestWillStart:self];
+        }
+    }];
+}
+
+- (void)toggleAccessoriesRequestDidStart {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestDidStart:)]) {
+            [obj requestDidStart:self];
+        }
+    }];
+}
+
+- (void)toggleAccessoriesRequestWillStop {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestWillStop:)]) {
+            [obj requestWillStop:self];
+        }
+    }];
+}
+
+- (void)toggleAccessoriesRequestDidStop {
+    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj respondsToSelector:@selector(requestDidStop:)]) {
+            [obj requestDidStop:self];
+        }
+    }];
 }
 
 @end

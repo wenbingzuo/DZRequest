@@ -30,6 +30,10 @@ typedef void(^DZBatchRequestFailureCallback)(DZBatchRequest *batchRequest, __kin
  */
 @property (nonatomic, assign) BOOL cancelWhenErrorOccur;
 
+@property (nonatomic, strong, readonly) NSMutableArray *accessories;
+- (void)addAccessory:(id<DZRequestAccessory>)accessory;
+
+
 @property (nonatomic, copy) DZBatchRequestSuccessCallback successCallback;
 @property (nonatomic, copy) DZBatchRequestFailureCallback failureCallback;
 - (void)setSuccesssCallback:(DZBatchRequestSuccessCallback)success failureCallback:(DZBatchRequestFailureCallback)failure;
