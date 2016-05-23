@@ -12,9 +12,10 @@
 @interface DZChainRequest ()
 
 @property (nonatomic, strong, readwrite) NSArray *requests;
-@property (nonatomic, assign, readwrite) DZRequestState state;
 @property (nonatomic, strong, readwrite) NSMutableArray *accessories;
 
+@property (nonatomic, assign, getter=isRunning) BOOL running;
+@property (nonatomic, assign, getter=isCanceling) BOOL canceling;
 @end
 
 @implementation DZChainRequest
@@ -23,7 +24,6 @@
     self = [super init];
     if (self) {
         self.requests = requests;
-        self.state = DZRequestStateIdle;
         self.completionQueue = dispatch_get_main_queue();
     }
     return self;
@@ -46,8 +46,8 @@
 }
 
 - (void)start {
-    if (self.state == DZRequestStateRunning) return;
-    self.state = DZRequestStateRunning;
+    if (self.isRunning) return;
+    self.running = YES;
     [[DZChainRequestManager sharedManager] addChainRequest:self];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -86,9 +86,9 @@
         }];
         
         dispatch_async(self.completionQueue?self.completionQueue:dispatch_get_main_queue(), ^{
-            if (lastError.code != NSURLErrorCancelled) {
-                self.state = DZRequestStateCompleted;
-            }
+            self.running = NO;
+            self.canceling = NO;
+            
             if (lastError) {
                 !self.failureCallback?:self.failureCallback(self, lastRequest, lastError);
             } else {
@@ -109,8 +109,8 @@
 }
 
 - (void)cancel {
-    if (self.state == DZRequestStateCanceling) return;
-    self.state = DZRequestStateCanceling;
+    if (self.isCanceling) return;
+    self.canceling = YES;
     
     [self.requests enumerateObjectsUsingBlock:^(DZBaseRequest * _Nonnull request, NSUInteger idx, BOOL * _Nonnull stop) {
         [request cancel];

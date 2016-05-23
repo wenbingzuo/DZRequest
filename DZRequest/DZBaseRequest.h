@@ -27,13 +27,6 @@ typedef NS_ENUM(NSUInteger, DZResponseSerializerType) {
     DZResponseSerializerTypeJSON
 };
 
-typedef NS_ENUM(NSUInteger, DZRequestState) {
-    DZRequestStateIdle = 0,
-    DZRequestStateRunning,
-    DZRequestStateCompleted,
-    DZRequestStateCanceling,
-};
-
 @protocol DZRequestAccessory <NSObject>
 
 @optional
@@ -59,6 +52,7 @@ typedef NS_ENUM(NSUInteger, DZRequestState) {
 
 typedef void(^DZRequestSuccessCallback)(__kindof DZBaseRequest *request, id responseObject);
 typedef void(^DZRequestFailureCallback)(__kindof DZBaseRequest *request, NSError *error);
+typedef void(^DZRequestCancelCallback)(__kindof DZBaseRequest *request);
 typedef void(^DZRequestConstructionCallback)(id<AFMultipartFormData> formData);
 typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 
@@ -68,11 +62,6 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
  The data task from `NSURLSession`.
 */
 @property (nonatomic, strong) NSURLSessionDataTask *task;
-
-/**
- The current state of the request.
- */
-@property (nonatomic, assign, readonly) DZRequestState state;
 
 @property (nonatomic, strong, readonly) NSMutableArray *accessories;
 - (void)addAccessory:(id<DZRequestAccessory>)accessory;
@@ -105,19 +94,21 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 /// @name Callback
 ///---------------
 
+@property (nonatomic, copy) DZRequestUploadProgressCallback uploadProgressCallback;
+
 @property (nonatomic, copy) DZRequestSuccessCallback successCallback;
 @property (nonatomic, copy) DZRequestFailureCallback failureCallback;
 - (void)setSuccessCallback:(DZRequestSuccessCallback)success failure:(DZRequestFailureCallback)failure;
 
-@property (nonatomic, copy) DZRequestUploadProgressCallback uploadProgressCallback;
-
 - (void)start;
 - (void)startRequestSuccessCallback:(DZRequestSuccessCallback)success failureCallback:(DZRequestFailureCallback)failure;
 
+@property (nonatomic, copy) DZRequestCancelCallback cancelCallback;
 /**
  When invoked, the `failureCallback` will receive an error value of { NSURLErrorDomain, NSURLErrorCancelled }. But if the request has already finished the task, that make no sense.
  */
 - (void)cancel;
+- (void)cancelWithCallback:(DZRequestCancelCallback)cancel;
 
 - (void)requestDidFinishSuccess;
 - (void)requestDidFinishFailure;

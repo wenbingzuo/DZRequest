@@ -49,7 +49,9 @@
         success = NO;
         dispatch_semaphore_signal(semaphore);
     }];
-    [self.signInRequest cancel];
+    [self.signInRequest cancelWithCallback:^(__kindof DZBaseRequest *request) {
+        
+    }];
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     
     return success;

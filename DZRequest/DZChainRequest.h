@@ -16,7 +16,6 @@ typedef void(^DZChainRequestFailureCallback)(DZChainRequest *chainRequest, __kin
 @interface DZChainRequest : NSObject
 
 @property (nonatomic, strong, readonly) NSArray *requests;
-@property (nonatomic, assign, readonly) DZRequestState state;
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
 
 @property (nonatomic, strong, readonly) NSMutableArray *accessories;
@@ -30,7 +29,10 @@ typedef void(^DZChainRequestFailureCallback)(DZChainRequest *chainRequest, __kin
 
 - (void)start;
 - (void)startChainRequestSuccessCallback:(DZChainRequestSuccessCallback)success failureCallback:(DZChainRequestFailureCallback)failure;
+
+
 - (void)cancel;
+
 
 @end
 

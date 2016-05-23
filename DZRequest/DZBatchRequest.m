@@ -12,9 +12,10 @@
 @interface DZBatchRequest ()
 
 @property (nonatomic, strong, readwrite) NSArray *requests;
-@property (nonatomic, assign, readwrite) DZRequestState state;
 @property (nonatomic, strong, readwrite) NSMutableArray *accessories;
 
+@property (nonatomic, assign, getter=isRunning) BOOL running;
+@property (nonatomic, assign, getter=isCanceling) BOOL canceling;
 @end
 
 @implementation DZBatchRequest
@@ -34,7 +35,6 @@
     self = [super init];
     if (self) {
         self.completionQueue = dispatch_get_main_queue();
-        self.state = DZRequestStateIdle;
         self.cancelWhenErrorOccur = YES;
         
         NSMutableArray *array = [NSMutableArray array];
@@ -51,8 +51,8 @@
 }
 
 - (void)start {
-    if (self.state == DZRequestStateRunning) return;
-    self.state = DZRequestStateRunning;
+    if (self.isRunning) return;
+    self.running = YES;
     [self toggleAccessoriesRequestWillStart];
     [[DZBatchRequestManager sharedManager] addBatchRequest:self];
     
@@ -67,6 +67,10 @@
         dispatch_group_enter(group);
         dispatch_group_async(group, queue, ^{
             @weakify(self)
+            [request cancelWithCallback:^(__kindof DZBaseRequest *request) {
+                dispatch_group_leave(group);
+            }];
+            
             [request startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
                 @strongify(self)
                 
@@ -92,10 +96,8 @@
             } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
                 @strongify(self)
                 
-                if (error.code != NSURLErrorCancelled || self.state == DZRequestStateCanceling) {
-                    lastRequest = request;
-                    lastError = error;
-                }
+                lastRequest = request;
+                lastError = error;
                 
                 if (self.cancelWhenErrorOccur && flag) {
                     flag = NO;
@@ -110,9 +112,8 @@
     }
     
     dispatch_group_notify(group, self.completionQueue?self.completionQueue:dispatch_get_main_queue(), ^{
-        if (lastError.code != NSURLErrorCancelled) {
-            self.state = DZRequestStateCompleted;
-        }
+        self.running = NO;
+        self.canceling = NO;
         
         [self toggleAccessoriesRequestWillStop];
         if (lastError) {
@@ -140,8 +141,8 @@
 }
 
 - (void)cancel {
-    if (self.state == DZRequestStateCanceling) return;
-    self.state = DZRequestStateCanceling;
+    if (self.isCanceling) return;
+    self.canceling = YES;
     
     for (DZBaseRequest *request in self.requests) {
         [request cancel];

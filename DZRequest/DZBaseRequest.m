@@ -13,7 +13,9 @@
 
 @interface DZBaseRequest ()
 @property (nonatomic, strong, readwrite) NSMutableArray *accessories;
-@property (nonatomic, assign, readwrite) DZRequestState state;
+
+@property (nonatomic, assign, getter=isRunning) BOOL running;
+@property (nonatomic, assign, getter=isCanceling) BOOL canceling;
 @end
 
 @implementation DZBaseRequest
@@ -25,7 +27,6 @@
         self.requestTimeoutInterval = 20;
         self.requestSerializerType = DZRequestSerializerTypeJSON;
         self.responseSerializerType = DZResponseSerializerTypeJSON;
-        self.state = DZRequestStateIdle;
     }
     return self;
 }
@@ -42,8 +43,8 @@
 }
 
 - (void)start {
-    if (self.state == DZRequestStateRunning) return;
-    self.state = DZRequestStateRunning;
+    if (self.isRunning) return;
+    self.running = YES;
     
     [self toggleAccessoriesRequestWillStart];
     [[DZRequestManager sharedManager] addRequest:self];
@@ -60,9 +61,14 @@
 }
 
 - (void)cancel {
-    if (self.state == DZRequestStateCanceling) return;
-    self.state = DZRequestStateCanceling;
+    if (self.canceling) return;
+    self.canceling = YES;
     [[DZRequestManager sharedManager] removeRequest:self];
+}
+
+- (void)cancelWithCallback:(DZRequestCancelCallback)cancel {
+    self.cancelCallback = cancel;
+    [self cancel];
 }
 
 - (NSInteger)responseStatusCode {
@@ -207,10 +213,8 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
     DZBaseRequest *request = self.requests[key];
     request.responseObject = responseObject;
     request.error = error;
+    request.running = NO;
     
-    if (error.code != NSURLErrorCancelled) {
-        request.state = DZRequestStateCompleted;
-    }
     [request toggleAccessoriesRequestWillStop];
     if (!error) {
         [request requestDidFinishSuccess];
@@ -287,7 +291,7 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
             if (constructionBlock) {
                 task = [self.sessionManager POST:url parameters:params constructingBodyWithBlock:constructionBlock progress:^(NSProgress * _Nonnull uploadProgress) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        uploadProgressCallback(uploadProgress);
+                        !uploadProgressCallback?:uploadProgressCallback(uploadProgress);
                     });
                 } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                     [self _handleResponse:task response:responseObject error:nil];
@@ -330,6 +334,10 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
 
 - (void)removeRequest:(DZBaseRequest *)request {
     [request.task cancel];
+    [self _removeTask:request];
+    request.running = NO;
+    request.canceling = NO;
+    !request.cancelCallback?:request.cancelCallback(request);
 }
 
 @end

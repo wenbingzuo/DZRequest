@@ -21,11 +21,6 @@ typedef void(^DZBatchRequestFailureCallback)(DZBatchRequest *batchRequest, __kin
 @property (nonatomic, strong, readonly) NSArray *requests;
 
 /**
- The current state of the batch request.
- */
-@property (nonatomic, assign, readonly) DZRequestState state;
-
-/**
  A flag to indicate whether cancel the rest request when error occurs.
  */
 @property (nonatomic, assign) BOOL cancelWhenErrorOccur;
