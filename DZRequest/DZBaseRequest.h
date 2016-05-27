@@ -99,6 +99,9 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 /// @name Callback
 ///---------------
 
+/**
+ If the request is a multipart `POST` request, this block will be invoked multiple times until the request finished.
+ */
 @property (nonatomic, copy) DZRequestUploadProgressCallback uploadProgressCallback;
 
 @property (nonatomic, copy) DZRequestSuccessCallback successCallback;

@@ -9,7 +9,7 @@
 #import "DZChainRequest.h"
 #import "DZRequestConst.h"
 
-@interface DZChainRequest ()
+@interface DZChainRequest () <DZRequestAccessory>
 
 @property (nonatomic, strong, readwrite) NSArray *requests;
 @property (nonatomic, strong, readwrite) NSMutableArray *accessories;
@@ -23,8 +23,11 @@
 - (instancetype)initWithRequests:(NSArray<DZBaseRequest *> *)requests {
     self = [super init];
     if (self) {
-        self.requests = requests;
         self.completionQueue = dispatch_get_main_queue();
+        self.requests = requests;
+        for (DZBaseRequest *request in self.requests) {
+            [request addAccessory:self];
+        }
     }
     return self;
 }
@@ -61,6 +64,7 @@
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             
             [request setCancelCallback:^(__kindof DZBaseRequest *request) {
+                *stop = YES;
                 dispatch_semaphore_signal(semaphore);
             }];
             [request startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
@@ -127,10 +131,7 @@
     if (self.isCanceling) return;
     self.canceling = YES;
     
-    [self.requests enumerateObjectsUsingBlock:^(DZBaseRequest * _Nonnull request, NSUInteger idx, BOOL * _Nonnull stop) {
-        [request cancel];
-    }];
-    [[DZChainRequestManager sharedManager] removeChainRequest:self];
+    [self _cancelAllSubRequest];
 }
 
 - (void)cancelWithCallback:(DZChainRequestCancelCallback)cancel {
@@ -138,7 +139,21 @@
     [self cancel];
 }
 
+#pragma mark - DZRequestAccessory
+
+- (void)requestDidStart:(id)request {
+    if (self.canceling && [request isKindOfClass:[DZBaseRequest class]]) {
+        [self _cancelAllSubRequest];
+    }
+}
+
 #pragma mark - Private
+
+- (void)_cancelAllSubRequest {
+    for (DZBaseRequest *request in self.requests) {
+        if (request.canCancel) [request cancel];
+    }
+}
 
 - (void)toggleAccessoriesRequestWillStart {
     [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {

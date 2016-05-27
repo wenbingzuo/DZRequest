@@ -41,6 +41,12 @@
     } failureCallback:^(DZChainRequest *chainRequest, __kindof DZBaseRequest *request, NSError *error) {
         DZLog(@"failure %@\n%@\n%@", chainRequest.requests, request, error.localizedDescription);
     }];
+//    [self.chainRequest cancelWithCallback:^(DZChainRequest *chainRequest) {
+//        
+//    }];
+    [self.chainRequest setCancelCallback:^(DZChainRequest *chainRequest) {
+        
+    }];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
