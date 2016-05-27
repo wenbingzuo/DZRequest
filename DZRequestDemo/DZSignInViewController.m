@@ -23,6 +23,12 @@
 - (DZSignInRequest *)signInRequest {
     if (!_signInRequest) {
         _signInRequest = [DZSignInRequest new];
+        [_signInRequest setResponseFilterCallback:^NSError *(__kindof DZBaseRequest *request, id responseObject) {
+            if (responseObject) {
+                
+            }
+            return [NSError errorWithDomain:@"haha" code:100 userInfo:nil];
+        }];
     }
     return _signInRequest;
 }

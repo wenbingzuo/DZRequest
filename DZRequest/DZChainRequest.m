@@ -72,15 +72,6 @@
                 lastResponseObject = responseObject;
                 lastRequest = request;
                 
-                if (request.responseFilterCallback) {
-                    NSError *blockError = request.responseFilterCallback(request);
-                    if (blockError) {
-                        lastError = blockError;
-                        lastResponseObject = nil;
-                        *stop = YES;
-                    }
-                }
-                
                 dispatch_semaphore_signal(semaphore);
             } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
                 lastError = error;

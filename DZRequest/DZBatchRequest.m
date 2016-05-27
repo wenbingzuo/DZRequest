@@ -73,26 +73,7 @@
             }];
             
             [request startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
-                @strongify(self)
-                
-                if (self.cancelWhenErrorOccur && flag) {
-                    if (!request.responseFilterCallback) {
-                        dispatch_group_leave(group);
-                        return;
-                    }
-                    
-                    NSError *error = request.responseFilterCallback(request);
-                    if (!error) return;
-                    
-                    lastRequest = request;
-                    lastError = error;
-                    flag = NO;
-                    [self cancel];
-                    
-                    dispatch_group_leave(group);
-                } else {
-                    dispatch_group_leave(group);
-                }
+                dispatch_group_leave(group);
             } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
                 @strongify(self)
                 

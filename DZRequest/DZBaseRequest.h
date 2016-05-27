@@ -14,17 +14,19 @@ typedef NS_ENUM(NSUInteger, DZRequestMethod) {
     DZRequestMethodGET = 0,
     DZRequestMethodPOST,
     DZRequestMethodPUT,
-    DZRequestMethodDELETE
+    DZRequestMethodDELETE,
+    DZRequestMethodPATCH,
+    DZRequestMethodHEAD,
 };
 
 typedef NS_ENUM(NSUInteger, DZRequestSerializerType) {
     DZRequestSerializerTypeHTTP = 0,
-    DZRequestSerializerTypeJSON
+    DZRequestSerializerTypeJSON,
 };
 
 typedef NS_ENUM(NSUInteger, DZResponseSerializerType) {
-    DZResponseSerializerTypeHTTP= 0,
-    DZResponseSerializerTypeJSON
+    DZResponseSerializerTypeHTTP = 0,
+    DZResponseSerializerTypeJSON,
 };
 
 
@@ -55,6 +57,7 @@ typedef NS_ENUM(NSUInteger, DZResponseSerializerType) {
 
 @end
 
+typedef NSError *(^DZRequestResponseFilterCallback)(__kindof DZBaseRequest *request, id responseObject);
 typedef void(^DZRequestSuccessCallback)(__kindof DZBaseRequest *request, id responseObject);
 typedef void(^DZRequestFailureCallback)(__kindof DZBaseRequest *request, NSError *error);
 typedef void(^DZRequestCancelCallback)(__kindof DZBaseRequest *request);
@@ -94,15 +97,18 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 @property (nonatomic, strong) id responseObject;
 @property (nonatomic, strong) NSError *error;
 @property (nonatomic, assign, readonly) NSInteger responseStatusCode;
+@property (nonatomic, strong, readonly) NSDictionary *responseHeader;
 
 ///---------------
 /// @name Callback
 ///---------------
 
 /**
- If the request is a multipart `POST` request, this block will be invoked multiple times until the request finished.
+ If the request is a multipart `POST` request, this block will be invoked multiple times until upload finishes.
  */
 @property (nonatomic, copy) DZRequestUploadProgressCallback uploadProgressCallback;
+@property (nonatomic, copy) DZRequestResponseFilterCallback responseFilterCallback;
+- (void)setResponseFilterCallback:(DZRequestResponseFilterCallback)responseFilterCallback;
 
 @property (nonatomic, copy) DZRequestSuccessCallback successCallback;
 @property (nonatomic, copy) DZRequestFailureCallback failureCallback;
@@ -132,18 +138,15 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
  */
 - (void)cancelWithCallback:(DZRequestCancelCallback)cancel;
 
+/**
+ Revoked when request succeeds.
+ */
 - (void)requestDidFinishSuccess;
-- (void)requestDidFinishFailure;
-
-@end
-
-@interface DZBaseRequest (DZRequestAdd)
 
 /**
- Not used by default. This is a convenient property to construct your own request.
- @see `DZChainRequest.m` and `DZBatchRequest.m`
+ Revoked when request fails.
  */
-@property (nonatomic, copy) NSError * (^responseFilterCallback)(DZBaseRequest *request);
+- (void)requestDidFinishFailure;
 
 @end
 

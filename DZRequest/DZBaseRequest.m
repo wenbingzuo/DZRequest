@@ -60,10 +60,6 @@
     self.failureCallback = failure;
 }
 
-- (BOOL)canCancel {
-    return self.task ? YES : NO;
-}
-
 - (void)cancel {
     if (self.canceling) return;
     self.canceling = YES;
@@ -75,16 +71,26 @@
     [self cancel];
 }
 
-- (NSInteger)responseStatusCode {
-    return [(NSHTTPURLResponse *)self.task.response statusCode];
-}
-
 - (void)requestDidFinishSuccess {
     
 }
 
 - (void)requestDidFinishFailure {
     
+}
+
+#pragma mark - Getter
+
+- (NSInteger)responseStatusCode {
+    return [(NSHTTPURLResponse *)self.task.response statusCode];
+}
+
+- (BOOL)canCancel {
+    return self.task ? YES : NO;
+}
+
+- (NSDictionary *)responseHeader {
+    return [(NSHTTPURLResponse *)self.task.response allHeaderFields];
 }
 
 #pragma mark - Private
@@ -119,20 +125,6 @@
             [obj requestDidStop:self];
         }
     }];
-}
-
-@end
-
-@implementation DZBaseRequest (DZRequestAdd)
-
-@dynamic responseFilterCallback;
-
-- (void)setResponseFilterCallback:(NSError * (^)(DZBaseRequest *))responseFilterCallback {
-    objc_setAssociatedObject(self, _cmd, responseFilterCallback, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-- (NSError * (^)(DZBaseRequest *))responseFilterCallback {
-    return objc_getAssociatedObject(self, @selector(setResponseFilterCallback:));
 }
 
 @end
@@ -212,35 +204,53 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
     }
 }
 
+- (void)_handleResponseSuccess:(DZBaseRequest *)request responseObject:(id)responseObject {
+    request.responseObject = responseObject;
+    request.error = nil;
+    [request requestDidFinishSuccess];
+    !request.successCallback?:request.successCallback(request, request.responseObject);
+}
+
+- (void)_handleResponseFailure:(DZBaseRequest *)request error:(NSError *)error {
+    request.responseObject = nil;
+    request.error = error;
+    [request requestDidFinishFailure];
+    !request.failureCallback?:request.failureCallback(request, request.error);
+}
+
+- (void)_handleResponseCancelled:(DZBaseRequest *)request {
+    !request.cancelCallback?:request.cancelCallback(request);
+}
+
 - (void)_handleResponse:(NSURLSessionDataTask *)task response:(id)responseObject error:(NSError *)error {
     NSString *key = DZHashStringFromTask(task);
     
     DZBaseRequest *request = self.requests[key];
     if (error.code == NSURLErrorCancelled) {
         request.running = NO;
-        !request.cancelCallback?:request.cancelCallback(request);
+        [self _handleResponseCancelled:request];
         request.canceling = NO;
     } else {
-        request.responseObject = responseObject;
-        request.error = error;
         request.running = NO;
         request.canceling = NO;
         
         [request toggleAccessoriesRequestWillStop];
         if (!error) {
-            [request requestDidFinishSuccess];
-            if (request.successCallback) {
-                request.successCallback(request, request.responseObject);
+            if (request.responseFilterCallback) {
+                NSError *filterError = request.responseFilterCallback(request, responseObject);
+                if (filterError) {
+                    [self _handleResponseFailure:request error:filterError];
+                } else {
+                    [self _handleResponseSuccess:request responseObject:responseObject];
+                }
+            } else {
+                [self _handleResponseSuccess:request responseObject:responseObject];
             }
         } else {
-            [request requestDidFinishFailure];
-            if (request.failureCallback) {
-                request.failureCallback(request, request.error);
-            }
+            [self _handleResponseFailure:request error:error];
         }
         [request toggleAccessoriesRequestDidStop];
     }
-    
     
     [self _removeTask:request];
 }
@@ -335,6 +345,23 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
                 [self _handleResponse:task response:nil error:error];
             }];
         } break;
+            
+        case DZRequestMethodPATCH: {
+            task = [self.sessionManager PATCH:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                [self _handleResponse:task response:responseObject error:nil];
+            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                [self _handleResponse:task response:nil error:error];
+            }];
+        } break;
+            
+        case DZRequestMethodHEAD: {
+            task = [self.sessionManager HEAD:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task) {
+                [self _handleResponse:task response:nil error:nil];
+            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                [self _handleResponse:task response:nil error:error];
+            }];
+        } break;
+            
         default:
             break;
     }
