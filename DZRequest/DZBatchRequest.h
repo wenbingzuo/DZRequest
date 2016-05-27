@@ -22,7 +22,8 @@ typedef void(^DZBatchRequestCancelCallback)(DZBatchRequest *batchRequest);
 @property (nonatomic, strong, readonly) NSArray *requests;
 
 /**
- A flag to indicate whether cancel the rest request when error occurs.
+ A flag to indicate whether cancel the rest request or not when error occurs.
+ Default is YES.
  */
 @property (nonatomic, assign) BOOL cancelWhenErrorOccur;
 
@@ -38,7 +39,6 @@ typedef void(^DZBatchRequestCancelCallback)(DZBatchRequest *batchRequest);
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
 
 - (void)start;
-
 - (void)startBatchReqeustSuccessCallback:(DZBatchRequestSuccessCallback)success failureCallback:(DZBatchRequestFailureCallback)failure;
 
 @property (nonatomic, copy) DZBatchRequestCancelCallback cancelCallback;

@@ -27,24 +27,29 @@ typedef NS_ENUM(NSUInteger, DZResponseSerializerType) {
     DZResponseSerializerTypeJSON
 };
 
+
+/**
+ This protocol is used in `DZBaseRequest`, `DZBatchRequest` and `DZChainRequest`.
+ Call super if the request itself want to do the hook.
+ */
 @protocol DZRequestAccessory <NSObject>
 
 @optional
 
 /**
- This method will be called immediately when invoking `-start` method.
+ This method will be invoked immediately when invoking `-start` method.
  */
 - (void)requestWillStart:(id)request;
 /**
- This method will be called immediately when resume the `task`.
+ This method will be invoked immediately when resume the `task`.
  */
 - (void)requestDidStart:(id)request;
 /**
- This method will be called before `successCallback` or `failureCallback` is invoked.
+ This method will be invoked before `successCallback` or `failureCallback` is invoked.
  */
 - (void)requestWillStop:(id)request;
 /**
- This method will be called after `successCallback` or `failureCallback` is invoked.
+ This method will be invoked after `successCallback` or `failureCallback` is invoked.
  */
 - (void)requestDidStop:(id)request;
 
@@ -103,11 +108,25 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 - (void)start;
 - (void)startRequestSuccessCallback:(DZRequestSuccessCallback)success failureCallback:(DZRequestFailureCallback)failure;
 
-@property (nonatomic, copy) DZRequestCancelCallback cancelCallback;
 /**
- When invoked, the `failureCallback` will receive an error value of { NSURLErrorDomain, NSURLErrorCancelled }. But if the request has already finished the task, that make no sense.
+ Indicate whether the request can cancel or not.
+ */
+@property (nonatomic, assign, readonly) BOOL canCancel;
+
+/**
+ When the request is cancelled, the block will be invoked.
+ */
+@property (nonatomic, copy) DZRequestCancelCallback cancelCallback;
+
+/**
+ Cancel the current task. A specific task can be cancelled for only once.
+ It's recommended to check whether the request can cancel or not by using `canCancel` before call this method.
  */
 - (void)cancel;
+
+/**
+ Cancel the current task with a specific block.
+ */
 - (void)cancelWithCallback:(DZRequestCancelCallback)cancel;
 
 - (void)requestDidFinishSuccess;

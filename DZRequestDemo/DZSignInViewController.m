@@ -49,10 +49,10 @@
         success = NO;
         dispatch_semaphore_signal(semaphore);
     }];
-//    [self.signInRequest cancelWithCallback:^(__kindof DZBaseRequest *request) {
-//        success = NO;
-//        dispatch_semaphore_signal(semaphore);
-//    }];
+    [self.signInRequest cancelWithCallback:^(__kindof DZBaseRequest *request) {
+        success = NO;
+        dispatch_semaphore_signal(semaphore);
+    }];
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     
     return success;

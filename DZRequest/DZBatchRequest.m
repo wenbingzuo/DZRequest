@@ -9,7 +9,7 @@
 #import "DZBatchRequest.h"
 #import "DZRequestConst.h"
 
-@interface DZBatchRequest ()
+@interface DZBatchRequest () <DZRequestAccessory>
 
 @property (nonatomic, strong, readwrite) NSArray *requests;
 @property (nonatomic, strong, readwrite) NSMutableArray *accessories;
@@ -40,6 +40,7 @@
         NSMutableArray *array = [NSMutableArray array];
         for (DZBaseRequest *request in requests) {
             if (![array containsObject:request]) {
+                [request addAccessory:self];
                 [array addObject:request];
             } else {
                 DZLog(@"Warning, same requests (%@) in batch requests, later removed", [request class]);
@@ -86,9 +87,8 @@
                     lastRequest = request;
                     lastError = error;
                     flag = NO;
-                    for (DZBaseRequest *request in self.requests) {
-                        [request cancel];
-                    }
+                    [self cancel];
+                    
                     dispatch_group_leave(group);
                 } else {
                     dispatch_group_leave(group);
@@ -101,9 +101,7 @@
                 
                 if (self.cancelWhenErrorOccur && flag) {
                     flag = NO;
-                    for (DZBaseRequest *request in self.requests) {
-                        [request cancel];
-                    }
+                    [self cancel];
                 }
                 
                 dispatch_group_leave(group);
@@ -152,10 +150,7 @@
     if (self.isCanceling) return;
     self.canceling = YES;
     
-    for (DZBaseRequest *request in self.requests) {
-        [request cancel];
-    }
-    [[DZBatchRequestManager sharedManager] removeBatchRequest:self];
+    [self _cancelAllSubRequest];
 }
 
 - (void)cancelWithCallback:(DZBatchRequestCancelCallback)cancel {
@@ -163,7 +158,21 @@
     [self cancel];
 }
 
+#pragma mark - DZRequestAccessory
+
+- (void)requestDidStart:(id)request {
+    if (self.canceling && [request isKindOfClass:[DZBaseRequest class]]) {
+        [self _cancelAllSubRequest];
+    }
+}
+
 #pragma mark - Private
+
+- (void)_cancelAllSubRequest {
+    for (DZBaseRequest *request in self.requests) {
+        if (request.canCancel) [request cancel];
+    }
+}
 
 - (void)toggleAccessoriesRequestWillStart {
     [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {

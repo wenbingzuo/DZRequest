@@ -60,6 +60,10 @@
     self.failureCallback = failure;
 }
 
+- (BOOL)canCancel {
+    return self.task ? YES : NO;
+}
+
 - (void)cancel {
     if (self.canceling) return;
     self.canceling = YES;
