@@ -67,11 +67,15 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 @interface DZBaseRequest : NSObject
 
 /**
- The data task from `NSURLSession`.
+ The data task for the request.
 */
-@property (nonatomic, strong) NSURLSessionDataTask *task;
+@property (nonatomic, strong, readonly) NSURLSessionDataTask *task;
 
-@property (nonatomic, strong, readonly) NSPointerArray *accessories;
+/**
+ Add a hook to the request, it's much like multi-delegate.
+ 
+ @param accessory A hook to the request. Nonretained.
+ */
 - (void)addAccessory:(id<DZRequestAccessory>)accessory;
 
 ///----------------------------
@@ -104,17 +108,38 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 ///---------------
 
 /**
- If the request is a multipart `POST` request, this block will be invoked multiple times until upload finishes.
+ If the request is a multipart `POST` request, this block will be invoked multiple times on main thread until upload finishes.
  */
 @property (nonatomic, copy) DZRequestUploadProgressCallback uploadProgressCallback;
-@property (nonatomic, copy) DZRequestResponseFilterCallback responseFilterCallback;
-- (void)setResponseFilterCallback:(DZRequestResponseFilterCallback)responseFilterCallback;
 
+/**
+ A block to filter the response object. If the return value is not nil, then `failureCallback` will be executed.
+ */
+@property (nonatomic, copy) DZRequestResponseFilterCallback responseFilterCallback;
+
+/**
+ A block to be executed on background thread when the request finish successfully.
+ */
 @property (nonatomic, copy) DZRequestSuccessCallback successCallback;
+
+/**
+ A block to be executed on background thread when the request failed.
+ */
 @property (nonatomic, copy) DZRequestFailureCallback failureCallback;
+
+/**
+ A convenient method to set the `successCallback` and `failureCallback`.
+ */
 - (void)setSuccessCallback:(DZRequestSuccessCallback)success failure:(DZRequestFailureCallback)failure;
 
+/**
+ Start the current request.
+ */
 - (void)start;
+
+/**
+ Start the current request with specific blocks.
+ */
 - (void)startRequestSuccessCallback:(DZRequestSuccessCallback)success failureCallback:(DZRequestFailureCallback)failure;
 
 /**
@@ -123,7 +148,7 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 @property (nonatomic, assign, readonly) BOOL canCancel;
 
 /**
- When the request is cancelled, the block will be invoked.
+ A block to be executed when the request is cancelled.
  */
 @property (nonatomic, copy) DZRequestCancelCallback cancelCallback;
 

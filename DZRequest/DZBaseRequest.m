@@ -8,11 +8,11 @@
 
 #import "DZBaseRequest.h"
 #import "DZRequestConst.h"
-#import <objc/runtime.h>
 #import <AFNetworkActivityIndicatorManager.h>
 
 @interface DZBaseRequest ()
 @property (nonatomic, strong, readwrite) NSPointerArray *accessories;
+@property (nonatomic, strong, readwrite) NSURLSessionDataTask *task;
 
 @property (nonatomic, assign, getter=isRunning) BOOL running;
 @property (nonatomic, assign, getter=isCanceling) BOOL canceling;
@@ -125,10 +125,6 @@
             [obj requestDidStop:self];
         }
     }
-}
-
-- (void)dealloc {
-    NSLog(@"%@ dealloc", [self class]);
 }
 
 @end

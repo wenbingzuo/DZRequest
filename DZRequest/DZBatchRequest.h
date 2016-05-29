@@ -16,9 +16,6 @@ typedef void(^DZBatchRequestCancelCallback)(DZBatchRequest *batchRequest);
 
 @interface DZBatchRequest : NSObject
 
-/**
- The requests ran in the receiver.
- */
 @property (nonatomic, strong, readonly) NSArray *requests;
 
 /**
@@ -27,16 +24,13 @@ typedef void(^DZBatchRequestCancelCallback)(DZBatchRequest *batchRequest);
  */
 @property (nonatomic, assign) BOOL cancelWhenErrorOccur;
 
-@property (nonatomic, strong, readonly) NSPointerArray *accessories;
-- (void)addAccessory:(id<DZRequestAccessory>)accessory;
+@property (nonatomic, strong) dispatch_queue_t completionQueue;
 
+- (void)addAccessory:(id<DZRequestAccessory>)accessory;
 
 @property (nonatomic, copy) DZBatchRequestSuccessCallback successCallback;
 @property (nonatomic, copy) DZBatchRequestFailureCallback failureCallback;
 - (void)setSuccesssCallback:(DZBatchRequestSuccessCallback)success failureCallback:(DZBatchRequestFailureCallback)failure;
-
-
-@property (nonatomic, strong) dispatch_queue_t completionQueue;
 
 - (void)start;
 - (void)startBatchReqeustSuccessCallback:(DZBatchRequestSuccessCallback)success failureCallback:(DZBatchRequestFailureCallback)failure;

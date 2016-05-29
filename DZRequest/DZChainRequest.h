@@ -19,14 +19,11 @@ typedef void(^DZChainRequestCancelCallback)(DZChainRequest *chainRequest);
 @property (nonatomic, strong, readonly) NSArray *requests;
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
 
-@property (nonatomic, strong, readonly) NSPointerArray *accessories;
 - (void)addAccessory:(id<DZRequestAccessory>)accessory;
 
 @property (nonatomic, copy) DZChainRequestSuccessCallback successCallback;
 @property (nonatomic, copy) DZChainRequestFailureCallback failureCallback;
 - (void)setSuccessCallback:(DZChainRequestSuccessCallback)success failureCallback:(DZChainRequestFailureCallback)failure;
-
-- (instancetype)initWithRequests:(NSArray<DZBaseRequest *>*) requests;
 
 - (void)start;
 - (void)startChainRequestSuccessCallback:(DZChainRequestSuccessCallback)success failureCallback:(DZChainRequestFailureCallback)failure;
@@ -34,6 +31,12 @@ typedef void(^DZChainRequestCancelCallback)(DZChainRequest *chainRequest);
 @property (nonatomic, copy) DZChainRequestCancelCallback cancelCallback;
 - (void)cancel;
 - (void)cancelWithCallback:(DZChainRequestCancelCallback)cancel;
+
+///---------------------
+/// @name Initialization
+///---------------------
+
+- (instancetype)initWithRequests:(NSArray<DZBaseRequest *>*) requests;
 
 @end
 
