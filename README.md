@@ -1,10 +1,8 @@
 # DZRequest
-======
 
 DZRequest is a simple wrapper of AFNetworking 3.0.
 
 ## Installation
-======
 
 ### CocoaPods
 
@@ -17,7 +15,6 @@ pod "DZRequest"
 Just drop the `DZRequest` folder to your project.
 
 ## Usage
-======
 
 ### GET
 
