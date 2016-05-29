@@ -12,7 +12,7 @@
 
 @interface DZSignInViewController ()
 
-@property (nonatomic, strong) DZSignInRequest *signInRequest;
+
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 
@@ -20,18 +20,18 @@
 
 @implementation DZSignInViewController
 
-- (DZSignInRequest *)signInRequest {
-    if (!_signInRequest) {
-        _signInRequest = [DZSignInRequest new];
-        [_signInRequest setResponseFilterCallback:^NSError *(__kindof DZBaseRequest *request, id responseObject) {
-            if (responseObject) {
-                
-            }
-            return [NSError errorWithDomain:@"haha" code:100 userInfo:nil];
-        }];
-    }
-    return _signInRequest;
-}
+//- (DZSignInRequest *)signInRequest {
+//    if (!_signInRequest) {
+//        _signInRequest = [DZSignInRequest new];
+//        [_signInRequest setResponseFilterCallback:^NSError *(__kindof DZBaseRequest *request, id responseObject) {
+//            if (responseObject) {
+//                
+//            }
+//            return [NSError errorWithDomain:@"haha" code:100 userInfo:nil];
+//        }];
+//    }
+//    return _signInRequest;
+//}
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(nullable id)sender {
     
@@ -40,11 +40,13 @@
     
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
-    self.signInRequest.username = self.usernameTextField.text;
-    self.signInRequest.password = self.passwordTextField.text;
+    DZSignInRequest *signInRequest = [DZSignInRequest new];
+    
+    signInRequest.username = self.usernameTextField.text;
+    signInRequest.password = self.passwordTextField.text;
     
     __block BOOL success = NO;
-    [self.signInRequest startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
+    [signInRequest startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
         success = YES;
 //        [[NSUserDefaults standardUserDefaults] setObject:responseObject[@"user"][@"access_token"] forKey:@"accessToken"];
         dispatch_semaphore_signal(semaphore);

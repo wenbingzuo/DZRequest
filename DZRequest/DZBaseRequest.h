@@ -71,7 +71,7 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 */
 @property (nonatomic, strong) NSURLSessionDataTask *task;
 
-@property (nonatomic, strong, readonly) NSMutableArray *accessories;
+@property (nonatomic, strong, readonly) NSPointerArray *accessories;
 - (void)addAccessory:(id<DZRequestAccessory>)accessory;
 
 ///----------------------------

@@ -12,7 +12,7 @@
 @interface DZBatchRequest () <DZRequestAccessory>
 
 @property (nonatomic, strong, readwrite) NSArray *requests;
-@property (nonatomic, strong, readwrite) NSMutableArray *accessories;
+@property (nonatomic, strong, readwrite) NSPointerArray *accessories;
 
 @property (nonatomic, assign, getter=isRunning) BOOL running;
 @property (nonatomic, assign, getter=isCanceling) BOOL canceling;
@@ -20,15 +20,15 @@
 
 @implementation DZBatchRequest
 
-- (NSMutableArray *)accessories {
+- (NSPointerArray *)accessories {
     if (!_accessories) {
-        _accessories = [NSMutableArray array];
+        _accessories = [NSPointerArray pointerArrayWithOptions:NSPointerFunctionsWeakMemory];
     }
     return _accessories;
 }
 
 - (void)addAccessory:(id<DZRequestAccessory>)accessory {
-    [self.accessories addObject:accessory];
+    [self.accessories addPointer:(__bridge void *)accessory];
 }
 
 - (instancetype)initWithRequests:(NSArray<DZBaseRequest *> *)requests {
@@ -156,35 +156,39 @@
 }
 
 - (void)toggleAccessoriesRequestWillStart {
-    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (id<DZRequestAccessory> obj in self.accessories) {
         if ([obj respondsToSelector:@selector(requestWillStart:)]) {
             [obj requestWillStart:self];
         }
-    }];
+    }
 }
 
 - (void)toggleAccessoriesRequestDidStart {
-    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (id<DZRequestAccessory> obj in self.accessories) {
         if ([obj respondsToSelector:@selector(requestDidStart:)]) {
             [obj requestDidStart:self];
         }
-    }];
+    }
 }
 
 - (void)toggleAccessoriesRequestWillStop {
-    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (id<DZRequestAccessory> obj in self.accessories) {
         if ([obj respondsToSelector:@selector(requestWillStop:)]) {
             [obj requestWillStop:self];
         }
-    }];
+    }
 }
 
 - (void)toggleAccessoriesRequestDidStop {
-    [self.accessories enumerateObjectsUsingBlock:^(id<DZRequestAccessory> obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (id<DZRequestAccessory> obj in self.accessories) {
         if ([obj respondsToSelector:@selector(requestDidStop:)]) {
             [obj requestDidStop:self];
         }
-    }];
+    }
+}
+
+- (void)dealloc {
+    NSLog(@"%@ dealloc", [self class]);
 }
 
 @end

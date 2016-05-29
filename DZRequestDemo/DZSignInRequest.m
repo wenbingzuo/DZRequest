@@ -9,7 +9,7 @@
 #import "DZSignInRequest.h"
 #import "NSMutableDictionary+DZRequest.h"
 
-@implementation DZSignInRequest
+@implementation DZSignInRequest 
 
 - (instancetype)init {
     self = [super init];

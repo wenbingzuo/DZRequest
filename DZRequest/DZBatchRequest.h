@@ -27,7 +27,7 @@ typedef void(^DZBatchRequestCancelCallback)(DZBatchRequest *batchRequest);
  */
 @property (nonatomic, assign) BOOL cancelWhenErrorOccur;
 
-@property (nonatomic, strong, readonly) NSMutableArray *accessories;
+@property (nonatomic, strong, readonly) NSPointerArray *accessories;
 - (void)addAccessory:(id<DZRequestAccessory>)accessory;
 
 

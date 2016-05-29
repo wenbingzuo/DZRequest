@@ -19,7 +19,7 @@ typedef void(^DZChainRequestCancelCallback)(DZChainRequest *chainRequest);
 @property (nonatomic, strong, readonly) NSArray *requests;
 @property (nonatomic, strong) dispatch_queue_t completionQueue;
 
-@property (nonatomic, strong, readonly) NSMutableArray *accessories;
+@property (nonatomic, strong, readonly) NSPointerArray *accessories;
 - (void)addAccessory:(id<DZRequestAccessory>)accessory;
 
 @property (nonatomic, copy) DZChainRequestSuccessCallback successCallback;
