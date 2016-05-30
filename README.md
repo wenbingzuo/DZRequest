@@ -7,7 +7,7 @@ DZRequest is a simple wrapper of AFNetworking 3.0.
 ### CocoaPods
 
 ``` bash
-pod "DZRequest"
+pod "DZRequest", :git => "https://github.com/DaZuo/DZRequest.git"
 ```
 
 ### Manual
