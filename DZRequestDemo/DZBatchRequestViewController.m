@@ -39,9 +39,6 @@
         NSLog(@"failure %@ --> %@ --> %@", batchRequest.requests, request, error.localizedDescription);
         
     }];
-    [self.batchRequest cancelWithCallback:^(DZBatchRequest *batchRequest) {
-        
-    }];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
