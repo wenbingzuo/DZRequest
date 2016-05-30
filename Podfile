@@ -1,3 +1,5 @@
 platform :ios, "7.0"
 
-pod "AFNetworking"
+target "DZRequestDemo" do
+    pod "AFNetworking"
+end
