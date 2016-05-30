@@ -8,7 +8,7 @@
 
 #import "DZBaseRequest.h"
 #import "DZRequestConst.h"
-#import <AFNetworkActivityIndicatorManager.h>
+#import "AFNetworkActivityIndicatorManager.h"
 
 @interface DZBaseRequest ()
 @property (nonatomic, strong, readwrite) NSPointerArray *accessories;
