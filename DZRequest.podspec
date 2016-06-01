@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "DZRequest"
-  s.version      = "1.0.0"
+  s.version      = "1.0.1"
   s.summary      = "DZRequest is a simple wrapper of AFNetworking 3.0"
 
   # This description is used to generate tags and improve search results.
