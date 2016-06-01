@@ -62,7 +62,7 @@ typedef void(^DZRequestSuccessCallback)(__kindof DZBaseRequest *request, id resp
 typedef void(^DZRequestFailureCallback)(__kindof DZBaseRequest *request, NSError *error);
 typedef void(^DZRequestCancelCallback)(__kindof DZBaseRequest *request);
 typedef void(^DZRequestConstructionCallback)(id<AFMultipartFormData> formData);
-typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
+typedef void(^DZRequestProgressCallback)(NSProgress *progress);
 
 @interface DZBaseRequest : NSObject
 
@@ -110,7 +110,12 @@ typedef void(^DZRequestUploadProgressCallback)(NSProgress *progress);
 /**
  If the request is a multipart `POST` request, this block will be invoked multiple times on main thread until upload finishes.
  */
-@property (nonatomic, copy) DZRequestUploadProgressCallback uploadProgressCallback;
+@property (nonatomic, copy) DZRequestProgressCallback uploadProgressCallback;
+
+/**
+ If the request is a `GET` request, the block can be used to monitor the download progress on main thread.
+ */
+@property (nonatomic, copy) DZRequestProgressCallback downloadProgressCallback;
 
 /**
  A block to filter the response object. If the return value is not nil, then `failureCallback` will be executed.

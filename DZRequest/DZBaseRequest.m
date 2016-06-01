@@ -291,19 +291,23 @@ static NSString * DZHashStringFromTask(NSURLSessionDataTask *task) {
         default:
             break;
     }
-    self.sessionManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html", @"text/xml", @"text/plain", @"text/json", @"text/javascript", @"image/png", @"image/jpeg", @"application/json", nil];
     
     NSString *url = DZURLStringFromRequest(request);
     if (url.length == 0) DZLog(@"Error, the request URL format is wrong.");
     DZRequestMethod method = request.requestMethod;
     id params = request.requestParameters;
     DZRequestConstructionCallback constructionBlock = request.requestConstructionCallback;
-    DZRequestUploadProgressCallback uploadProgressCallback = request.uploadProgressCallback;
+    DZRequestProgressCallback uploadProgressCallback = request.uploadProgressCallback;
+    DZRequestProgressCallback downloadProgressCallback = request.downloadProgressCallback;
     
     NSURLSessionDataTask *task = nil;
     switch (method) {
         case DZRequestMethodGET: {
-            task = [self.sessionManager GET:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            task = [self.sessionManager GET:url parameters:params progress:^(NSProgress *downloadProgress) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    !downloadProgressCallback?:downloadProgressCallback(downloadProgress);
+                });
+            } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 [self _handleResponse:task response:responseObject error:nil];
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                 [self _handleResponse:task response:nil error:error];

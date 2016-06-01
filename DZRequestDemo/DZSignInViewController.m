@@ -20,19 +20,6 @@
 
 @implementation DZSignInViewController
 
-//- (DZSignInRequest *)signInRequest {
-//    if (!_signInRequest) {
-//        _signInRequest = [DZSignInRequest new];
-//        [_signInRequest setResponseFilterCallback:^NSError *(__kindof DZBaseRequest *request, id responseObject) {
-//            if (responseObject) {
-//                
-//            }
-//            return [NSError errorWithDomain:@"haha" code:100 userInfo:nil];
-//        }];
-//    }
-//    return _signInRequest;
-//}
-
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(nullable id)sender {
     
     if ([identifier isEqualToString:@"chain"]) return YES;
@@ -61,6 +48,23 @@
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     
     return success;
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    
+    // Download Test
+    DZBaseRequest *request = [DZBaseRequest new];
+    request.responseSerializerType = DZResponseSerializerTypeHTTP;
+    request.requestURL = @"https://codeload.github.com/DaZuo/GitTest/zip/master";
+    [request setDownloadProgressCallback:^(NSProgress *progress) {
+        NSLog(@"%f -- %lld", progress.fractionCompleted, progress.totalUnitCount);
+    }];
+    [request startRequestSuccessCallback:^(__kindof DZBaseRequest *request, id responseObject) {
+        NSData *data = responseObject;
+        NSLog(@"length -- %ld", [data length]);
+    } failureCallback:^(__kindof DZBaseRequest *request, NSError *error) {
+        NSLog(@"error -- %@", error.localizedDescription);
+    }];
 }
 
 @end
